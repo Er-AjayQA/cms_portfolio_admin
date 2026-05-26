@@ -2,7 +2,9 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { loginService } from "@/services/auth.services";
 
 const initialState = {
-  user: null,
+  user: localStorage.getItem("user")
+    ? JSON.parse(localStorage.getItem("user"))
+    : null,
   token: localStorage.getItem("token"),
   isAuthenticated: Boolean(localStorage.getItem("token")),
   loading: false,
@@ -47,6 +49,7 @@ const authSlice = createSlice({
         state.user = action.payload.user ?? null;
         state.isAuthenticated = true;
         localStorage.setItem("token", action.payload.token);
+        localStorage.setItem("user", JSON.stringify(action.payload.user));
       })
       .addCase(loginUser.rejected, (state, action) => {
         state.loading = false;

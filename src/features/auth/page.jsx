@@ -90,7 +90,7 @@ export const LoginPage = () => {
 
         <section className="flex items-center justify-center px-4 py-8 md:px-8">
           <Card className="w-full max-w-md border-white/80 bg-white/90 py-0 shadow-none">
-            <CardHeader className="space-y-2 border-b border-slate-200/80 px-6 py-6">
+            <CardHeader className="space-y-2 px-6 py-6">
               <CardTitle className="text-2xl text-slate-950">Sign in</CardTitle>
               <CardDescription className="text-sm leading-6 text-slate-600">
                 Enter your credentials to access your dashboard.
