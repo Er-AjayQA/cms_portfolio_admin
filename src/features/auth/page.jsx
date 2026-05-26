@@ -1,6 +1,6 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useFormik } from "formik";
-import { ArrowRight, LockKeyhole, Mail } from "lucide-react";
+import { ArrowRight, Eye, EyeOff, LockKeyhole, Mail } from "lucide-react";
 import * as yup from "yup";
 import { useNavigate } from "react-router-dom";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
@@ -15,6 +15,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { useAuth } from "@/features/auth/useAuth";
 import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
+import { Toggle } from "@/components/ui/toggle";
 
 const loginSchema = yup.object({
   email: yup
@@ -30,6 +31,7 @@ const loginSchema = yup.object({
 export const LoginPage = () => {
   const navigate = useNavigate();
   const { login, loading, error, isAuthenticated, clearError } = useAuth();
+  const [showPassword, setShowPassword] = useState(false);
 
   const initialValues = {
     email: "",
@@ -142,7 +144,7 @@ export const LoginPage = () => {
                       <Input
                         id="password"
                         name="password"
-                        type="password"
+                        type={showPassword ? "text" : "password"}
                         placeholder="Enter your password"
                         className="h-12 rounded-2xl border-[#dbe3ee] bg-white/90 pl-10 shadow-[inset_0_1px_2px_rgba(15,23,42,0.04)] focus-visible:border-slate-900 focus-visible:ring-4 focus-visible:ring-slate-900/10"
                         value={formik.values.password}
@@ -150,6 +152,20 @@ export const LoginPage = () => {
                         onBlur={formik.handleBlur}
                         aria-invalid={showPasswordError ? "true" : "false"}
                       />
+                      <Toggle
+                        pressed={showPassword}
+                        onPressedChange={setShowPassword}
+                        aria-label="Toggle password visibility"
+                        size="sm"
+                        variant="ghost"
+                        className="absolute top-1/2 right-2 -translate-y-1/2 border-0 bg-transparent hover:bg-transparent"
+                      >
+                        {!showPassword ? (
+                          <EyeOff className="size-4 text-slate-400" />
+                        ) : (
+                          <Eye className="size-4 text-slate-400" />
+                        )}
+                      </Toggle>
                     </div>
                     {showPasswordError ? (
                       <p className="text-sm text-red-600">
