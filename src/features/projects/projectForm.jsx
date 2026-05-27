@@ -430,7 +430,6 @@ export const ProjectFormPage = () => {
           </FieldGroup>
 
           <Field orientation="horizontal" className="justify-end mt-5">
-            <Button type="submit">Submit</Button>
             <Button
               variant="default"
               type="button"
@@ -438,6 +437,7 @@ export const ProjectFormPage = () => {
             >
               Cancel
             </Button>
+            <Button type="submit">Submit</Button>
           </Field>
         </FieldSet>
       </form>

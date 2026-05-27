@@ -2,10 +2,37 @@ import { HeroShell } from "@/components/common/HeroShell";
 import { useProjectForm } from "./useProjectForm";
 import { DataTable } from "@/components/ui/data-table";
 import { Button } from "@/components/ui/button";
+import { useNavigate } from "react-router-dom";
+import { Eye, SquarePen } from "lucide-react";
+import { FaRegEdit, FaEye } from "react-icons/fa";
+import { Checkbox } from "@/components/ui/checkbox";
 
 export const ProjectListingPage = () => {
+  const navigate = useNavigate();
   const { projectsLoading, allProjects } = useProjectForm();
   const columns = [
+    {
+      id: "select",
+      header: ({ table }) => (
+        <Checkbox
+          checked={
+            table.getIsAllPageRowsSelected() ||
+            (table.getIsSomePageRowsSelected() && "indeterminate")
+          }
+          onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+          aria-label="Select all"
+        />
+      ),
+      cell: ({ row }) => (
+        <Checkbox
+          checked={row.getIsSelected()}
+          onCheckedChange={(value) => row.toggleSelected(!!value)}
+          aria-label="Select row"
+        />
+      ),
+      enableSorting: false,
+      enableHiding: false,
+    },
     {
       accessorKey: "title",
       header: "Title",
@@ -21,6 +48,11 @@ export const ProjectListingPage = () => {
     {
       accessorKey: "status",
       header: "Status",
+      cell: ({ row }) => {
+        const project = row.original;
+
+        return project?.status === "draft" ? "Draft" : "Published";
+      },
     },
     {
       id: "actions",
@@ -29,20 +61,21 @@ export const ProjectListingPage = () => {
         const project = row.original;
 
         return (
-          <div className="flex gap-2">
+          <div className="flex gap-1">
             <Button
               size="sm"
-              variant="outline"
+              variant="icon"
               onClick={() => navigate(`/projects/view/${project._id}`)}
             >
-              View
+              <FaEye />
             </Button>
 
             <Button
               size="sm"
+              variant="icon"
               onClick={() => navigate(`/projects/edit/${project._id}`)}
             >
-              Edit
+              <FaRegEdit />
             </Button>
           </div>
         );
@@ -51,7 +84,7 @@ export const ProjectListingPage = () => {
   ];
 
   return (
-    <div>
+    <div className="space-y-5">
       <HeroShell
         title="Projects"
         description="Manage your projects here"
