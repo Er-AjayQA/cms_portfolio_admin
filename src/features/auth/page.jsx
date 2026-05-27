@@ -1,7 +1,5 @@
-import { useEffect, useState } from "react";
-import { useFormik } from "formik";
+import { useEffect } from "react";
 import { ArrowRight, Eye, EyeOff, LockKeyhole, Mail } from "lucide-react";
-import * as yup from "yup";
 import { useNavigate } from "react-router-dom";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
@@ -16,49 +14,24 @@ import { Input } from "@/components/ui/input";
 import { useAuth } from "@/features/auth/useAuth";
 import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { Toggle } from "@/components/ui/toggle";
-
-const loginSchema = yup.object({
-  email: yup
-    .string()
-    .email("Enter a valid email address")
-    .required("Email is required"),
-  password: yup
-    .string()
-    .min(6, "Password must be at least 6 characters")
-    .required("Password is required"),
-});
+import { useAuthForm } from "./useAuthForm";
 
 export const LoginPage = () => {
   const navigate = useNavigate();
-  const { login, loading, error, isAuthenticated, clearError } = useAuth();
-  const [showPassword, setShowPassword] = useState(false);
-
-  const initialValues = {
-    email: "",
-    password: "",
-  };
-
-  const formik = useFormik({
-    initialValues: initialValues,
-    validationSchema: loginSchema,
-    onSubmit: async (values, helpers) => {
-      try {
-        await login(values).unwrap();
-        navigate("/dashboard", { replace: true });
-      } catch {
-        helpers.setSubmitting(false);
-      }
-    },
-  });
+  const { loading, error, isAuthenticated, clearError } = useAuth();
+  const {
+    formik,
+    showPassword,
+    setShowPassword,
+    showEmailError,
+    showPasswordError,
+  } = useAuthForm();
 
   useEffect(() => {
     if (isAuthenticated) {
       navigate("/dashboard", { replace: true });
     }
   }, [isAuthenticated, navigate]);
-
-  const showEmailError = formik.touched.email && formik.errors.email;
-  const showPasswordError = formik.touched.password && formik.errors.password;
 
   const handleChange = (event) => {
     if (error) {
@@ -73,7 +46,7 @@ export const LoginPage = () => {
       <div className="mx-auto grid min-h-[calc(100vh-3rem)] w-full max-w-7xl overflow-hidden rounded-[2rem] border border-white/70 bg-white/70 shadow-[0_32px_120px_rgba(15,23,42,0.14)] backdrop-blur-xl md:grid-cols-[1.1fr_0.9fr]">
         <section className="relative overflow-hidden bg-[radial-gradient(circle_at_top_left,_rgba(56,189,248,0.3),_transparent_28%),radial-gradient(circle_at_bottom_right,_rgba(34,197,94,0.16),_transparent_34%),linear-gradient(160deg,_#020617_0%,_#0f172a_55%,_#111827_100%)] text-white">
           <div className="pointer-events-none absolute rounded-[1.75rem] border border-white/10 md:inset-5" />
-          <div className="relative z-10 flex min-h-full flex-col justify-between gap-8 px-6 py-8 md:px-10 md:py-10">
+          <div className="relative z-10 flex flex-col justify-between min-h-full gap-8 px-6 py-8 md:px-10 md:py-10">
             <div className="flex flex-col gap-5">
               <div className="inline-flex w-fit items-center rounded-full border border-white/15 bg-white/10 px-3.5 py-2 text-[11px] font-semibold uppercase tracking-[0.24em] text-sky-200">
                 Portfolio Admin
@@ -94,14 +67,14 @@ export const LoginPage = () => {
 
         <section className="flex items-center justify-center px-4 py-6 md:px-8 md:py-8">
           <Card className="w-full max-w-[460px] border border-white/85 bg-gradient-to-b from-white/95 to-white/85 py-0 shadow-[0_18px_40px_rgba(15,23,42,0.08),inset_0_1px_0_rgba(255,255,255,0.7)]">
-            <CardHeader className="space-y-2 px-6 py-3">
+            <CardHeader className="px-6 py-3 space-y-2">
               <CardTitle className="text-2xl text-slate-950">Sign in</CardTitle>
               <CardDescription className="text-sm leading-6 text-slate-600">
                 Enter your credentials to access your dashboard.
               </CardDescription>
             </CardHeader>
 
-            <CardContent className="space-y-5 px-6 py-6">
+            <CardContent className="px-6 py-6 space-y-5">
               {error ? (
                 <Alert
                   variant="destructive"
@@ -117,7 +90,7 @@ export const LoginPage = () => {
                   <Field>
                     <FieldLabel htmlFor="email">Email address</FieldLabel>
                     <div className="relative">
-                      <Mail className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-slate-400" />
+                      <Mail className="absolute -translate-y-1/2 pointer-events-none top-1/2 left-3 size-4 text-slate-400" />
                       <Input
                         id="email"
                         name="email"
@@ -140,7 +113,7 @@ export const LoginPage = () => {
                   <Field>
                     <FieldLabel htmlFor="password">Password</FieldLabel>
                     <div className="relative">
-                      <LockKeyhole className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-slate-400" />
+                      <LockKeyhole className="absolute -translate-y-1/2 pointer-events-none top-1/2 left-3 size-4 text-slate-400" />
                       <Input
                         id="password"
                         name="password"
@@ -158,7 +131,7 @@ export const LoginPage = () => {
                         aria-label="Toggle password visibility"
                         size="sm"
                         variant="ghost"
-                        className="absolute top-1/2 right-2 -translate-y-1/2 border-0 bg-transparent hover:bg-transparent"
+                        className="absolute -translate-y-1/2 bg-transparent border-0 top-1/2 right-2 hover:bg-transparent"
                       >
                         {!showPassword ? (
                           <EyeOff className="size-4 text-slate-400" />

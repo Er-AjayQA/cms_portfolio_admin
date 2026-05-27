@@ -35,23 +35,25 @@ export const AppSidebar = () => {
   return (
     <Sidebar
       collapsible="icon"
-      className="border-none shadow-lg bg-white"
+      className="bg-white border-none shadow-lg"
       side="left"
       variant="sidebar"
     >
       <SidebarHeader className="drop-shadow-md shadow-md px-3 py-4 group-data-[collapsible=icon]:px-2">
         <div className="flex items-center gap-3 rounded-2xl bg-sidebar-accent px-3 py-3 group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:px-0">
-          <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-sidebar-primary text-sidebar-primary-foreground">
+          <div className="flex items-center justify-center size-10 shrink-0 rounded-xl bg-sidebar-primary text-sidebar-primary-foreground">
             <Sparkles className="size-4" />
           </div>
           <div className="min-w-0 group-data-[collapsible=icon]:hidden">
-            <p className="truncate text-sm font-semibold">Portfolio CMS</p>
-            <p className="truncate text-xs text-sidebar-foreground/70">
+            <p className="text-sm font-semibold truncate">Portfolio CMS</p>
+            <p className="text-xs truncate text-sidebar-foreground/70">
               Admin workspace
             </p>
           </div>
         </div>
       </SidebarHeader>
+
+      <SidebarSeparator />
 
       <SidebarContent className="py-2">
         <SidebarGroup className="px-2">
@@ -84,7 +86,7 @@ export const AppSidebar = () => {
 
       <SidebarSeparator />
 
-      <SidebarFooter className="border-t border-sidebar-border p-3 group-data-[collapsible=icon]:px-2">
+      <SidebarFooter className="p-3 group-data-[collapsible=icon]:px-2">
         <SidebarMenu className="gap-1">
           <SidebarMenuItem>
             <SidebarMenuButton

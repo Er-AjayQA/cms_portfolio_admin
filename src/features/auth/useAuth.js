@@ -1,9 +1,5 @@
 import { useAppDispatch, useAppSelector } from "@/app/hooks";
-import {
-  clearAuthError,
-  loginUser,
-  logout,
-} from "@/features/auth/authSlice";
+import { clearAuthError, loginUser, logout } from "@/features/auth/authSlice";
 import {
   selectAuthError,
   selectAuthLoading,
