@@ -13,6 +13,7 @@ import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { Textarea } from "@/components/ui/textarea";
 import { CustomDropdown } from "@/components/common/CustomDropdown";
+import { ImageIcon, Images, Trash2, Upload, Video } from "lucide-react";
 import {
   Select,
   SelectContent,
@@ -21,9 +22,19 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { RichTextEditor } from "@/components/common/RichTextEditor";
+import { Label } from "@/components/ui/label";
 
 export const ProjectFormPage = () => {
-  const { formik, categoryOptions } = useProjectForm();
+  const {
+    formik,
+    categoryOptions,
+    thumbnailPreview,
+    mediaPreviews,
+    handleThumbnailChange,
+    clearThumbnail,
+    handleMediaChange,
+    removeMediaItem,
+  } = useProjectForm();
   const navigate = useNavigate();
 
   return (
@@ -192,13 +203,13 @@ export const ProjectFormPage = () => {
 
             <CustomDropdown
               fieldType="techStack"
-              name="techStack"
+              name="techStackId"
               label="Tech Stack"
-              value={formik.values.techStack}
+              value={formik.values.techStackId}
               onChange={formik.setFieldValue}
               onBlur={formik.handleBlur}
-              touched={formik.touched.techStack}
-              error={formik.errors.techStack}
+              touched={formik.touched.techStackId}
+              error={formik.errors.techStackId}
               isAddNew={true}
               isMulti={true}
               searchPlaceholder="Search tech stack..."
@@ -258,6 +269,163 @@ export const ProjectFormPage = () => {
                   formik.setFieldValue("solution", nextValue)
                 }
               />
+            </Field>
+          </FieldGroup>
+
+          {/* Row 8 */}
+          <FieldGroup className="grid grid-cols-2 gap-5">
+            <Field>
+              <FieldLabel htmlFor="thumbnail">Upload Thumbnail</FieldLabel>
+              <div className="overflow-hidden bg-white border rounded-lg shadow-sm border-border/60">
+                <Label
+                  htmlFor="thumbnail"
+                  className="flex min-h-[230px] cursor-pointer flex-col items-center justify-center gap-3 border-b border-dashed border-border/70 bg-[radial-gradient(circle_at_top,_rgba(59,130,246,0.08),_transparent_42%),linear-gradient(180deg,_#ffffff_0%,_#f8fafc_100%)] p-6 text-center transition-colors hover:bg-slate-50"
+                >
+                  {thumbnailPreview ? (
+                    <img
+                      src={thumbnailPreview}
+                      alt="Thumbnail preview"
+                      className="object-cover w-full h-40 rounded-lg shadow-sm"
+                    />
+                  ) : (
+                    <div className="flex items-center justify-center rounded-full size-14 bg-slate-100 text-slate-600">
+                      <ImageIcon className="size-6" />
+                    </div>
+                  )}
+                  <div className="space-y-1">
+                    <p className="text-sm font-medium text-slate-900">
+                      {thumbnailPreview
+                        ? "Replace project thumbnail"
+                        : "Upload project thumbnail"}
+                    </p>
+                    <p className="text-xs text-slate-500">
+                      Best for cover image. PNG, JPG, WEBP or MP4 supported.
+                    </p>
+                  </div>
+                </Label>
+
+                <input
+                  id="thumbnail"
+                  name="thumbnail"
+                  type="file"
+                  accept="image/*,video/*"
+                  onChange={handleThumbnailChange}
+                  className="hidden"
+                />
+
+                <div className="flex items-center justify-between gap-3 px-4 py-3">
+                  <div className="flex items-center gap-2 text-sm text-slate-600">
+                    <Upload className="size-4" />
+                    <span>
+                      {formik.values.thumbnail?.name ||
+                        "No thumbnail selected yet"}
+                    </span>
+                  </div>
+                  {thumbnailPreview ? (
+                    <Button
+                      type="button"
+                      size="sm"
+                      variant="outline"
+                      onClick={clearThumbnail}
+                    >
+                      <Trash2 className="size-4" />
+                      Remove
+                    </Button>
+                  ) : null}
+                </div>
+              </div>
+              {formik.errors.thumbnail && formik.touched.thumbnail && (
+                <FieldError>{formik.errors.thumbnail}</FieldError>
+              )}
+            </Field>
+
+            <Field>
+              <FieldLabel htmlFor="media">Gallery</FieldLabel>
+              <div className="overflow-hidden bg-white border rounded-lg shadow-sm border-border/60">
+                <Label
+                  htmlFor="media"
+                  className="flex min-h-[230px] cursor-pointer flex-col items-center justify-center gap-3 border-b border-dashed border-border/70 bg-[radial-gradient(circle_at_top,_rgba(14,165,233,0.08),_transparent_42%),linear-gradient(180deg,_#ffffff_0%,_#f8fafc_100%)] p-6 text-center transition-colors hover:bg-slate-50"
+                >
+                  <div className="flex items-center justify-center rounded-full size-14 bg-slate-100 text-slate-600">
+                    <Images className="size-6" />
+                  </div>
+                  <div className="space-y-1">
+                    <p className="text-sm font-medium text-slate-900">
+                      Add gallery images or videos
+                    </p>
+                    <p className="text-xs text-slate-500">
+                      Upload multiple files for project showcase.
+                    </p>
+                  </div>
+                </Label>
+
+                <input
+                  id="media"
+                  name="media"
+                  type="file"
+                  multiple
+                  accept="image/*,video/*"
+                  onChange={handleMediaChange}
+                  className="hidden"
+                />
+
+                <div className="px-4 py-3">
+                  {mediaPreviews.length > 0 ? (
+                    <div className="grid grid-cols-2 gap-3">
+                      {mediaPreviews.map((item) => (
+                        <div
+                          key={item.id}
+                          className="overflow-hidden border rounded-lg border-border/60 bg-slate-50"
+                        >
+                          <div className="relative w-full h-28 bg-slate-100">
+                            {item.type === "video" ? (
+                              <video
+                                src={item.preview}
+                                className="object-cover w-full h-full"
+                              />
+                            ) : (
+                              <img
+                                src={item.preview}
+                                alt={item.name}
+                                className="object-cover w-full h-full"
+                              />
+                            )}
+                            <div className="absolute top-2 left-2 inline-flex items-center gap-1 rounded-full bg-black/70 px-2 py-1 text-[11px] font-medium text-white">
+                              {item.type === "video" ? (
+                                <Video className="size-3" />
+                              ) : (
+                                <ImageIcon className="size-3" />
+                              )}
+                              {item.type}
+                            </div>
+                          </div>
+                          <div className="flex items-center justify-between gap-2 px-3 py-2">
+                            <p className="text-xs truncate text-slate-600">
+                              {item.name}
+                            </p>
+                            <Button
+                              type="button"
+                              size="icon-xs"
+                              variant="outline"
+                              onClick={() => removeMediaItem(item.id)}
+                              aria-label={`Remove ${item.name}`}
+                            >
+                              <Trash2 className="size-3" />
+                            </Button>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <p className="text-sm text-slate-500">
+                      No gallery files selected yet.
+                    </p>
+                  )}
+                </div>
+              </div>
+              {formik.errors.media && formik.touched.media && (
+                <FieldError>{formik.errors.media}</FieldError>
+              )}
             </Field>
           </FieldGroup>
 
