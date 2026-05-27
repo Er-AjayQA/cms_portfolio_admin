@@ -9,6 +9,7 @@ export default {
         ring: "hsl(var(--ring))",
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
+        "text-destructive": "hsl(var(--destructive))",
       },
     },
   },
