@@ -1,23 +1,6 @@
-import React, { useEffect, useState, useMemo, useRef } from "react";
-import {
-  Check,
-  ChevronsUpDown,
-  Plus,
-  Loader2,
-  ChevronLeft,
-  ChevronRight,
-  X,
-  Search,
-} from "lucide-react";
-import {
-  Field,
-  FieldDescription,
-  FieldError,
-  FieldGroup,
-  FieldLabel,
-  FieldLegend,
-  FieldSet,
-} from "@/components/ui/field";
+import React, { useEffect, useMemo, useRef, useState } from "react";
+import { Check, ChevronsUpDown, Loader2, Plus, Search, X } from "lucide-react";
+import { Field, FieldLabel } from "@/components/ui/field";
 import { Button } from "@/components/ui/button";
 import {
   Popover,
@@ -25,8 +8,6 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
-// import { toast } from "react-toastify";
-
 import {
   createTechStackService,
   getAllTechStackService,
@@ -38,8 +19,6 @@ const FIELD_CONFIGS = {
     create: createTechStackService,
     labelKey: "name",
     valueKey: "_id",
-    placeholder: "Select tech stack...",
-    displayName: "Tech Stack",
   },
 };
 
@@ -51,105 +30,46 @@ export const CustomDropdown = ({
   onBlur,
   label,
   placeholder,
-  leadingIcon: LeadingIcon,
+  searchPlaceholder,
   error,
   touched,
   helpText,
   containerClass,
   disabled,
+  LeadingIcon,
   isViewMode = false,
-  isAddNew,
+  isAddNew = false,
   isMulti = false,
-  showSelectAll = false,
-
-  options,
-  optionLabelKey,
-  optionValueKey,
-  onCustomCreate,
-  isLoading,
-  selectedDisplayValue,
 }) => {
   const [open, setOpen] = useState(false);
   const [searchValue, setSearchValue] = useState("");
-  const [rawData, setRawData] = useState([]);
-  const [createdItems, setCreatedItems] = useState([]);
+  const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(false);
   const [isCreating, setIsCreating] = useState(false);
-  const [history, setHistory] = useState([]);
   const searchInputRef = useRef(null);
 
-  // 🔥 Check if direct mode (options provided)
-  const isDirectMode = options !== undefined;
-
-  // Get config based on mode
-  const config = useMemo(() => {
-    if (isDirectMode) {
-      // Direct mode config
-      return {
-        fetch: null,
-        create: onCustomCreate || null,
-        labelKey: optionLabelKey || "label",
-        valueKey: optionValueKey || "value",
-        placeholder: placeholder || "Select option...",
-        displayName: label || "Option",
-      };
-    }
-    // Config mode - original behavior
-    return FIELD_CONFIGS[fieldType] || {};
-  }, [
-    isDirectMode,
-    fieldType,
-    optionLabelKey,
-    optionValueKey,
-    placeholder,
-    onCustomCreate,
-    label,
-  ]);
-
+  const config = FIELD_CONFIGS[fieldType] || {};
   const showError = touched && error;
   const isLocked = isViewMode || disabled;
-  const fetchDataFromConfig = config.fetch;
-  const sourceData = useMemo(() => {
-    if (isDirectMode) {
-      return [...(options || []), ...createdItems];
-    }
 
-    return rawData;
-  }, [isDirectMode, options, createdItems, rawData]);
-  const isVendorField = !isDirectMode && fieldType === "vendor";
-  const visibleSourceData = useMemo(() => {
-    if (!isVendorField) return sourceData;
-
-    return sourceData.filter((item) => {
-      const rawStatus = String(item?.status ?? "")
-        .trim()
-        .toUpperCase();
-      if (typeof item?.isActive === "boolean") {
-        return item.isActive;
-      }
-
-      return rawStatus !== "INACTIVE";
-    });
-  }, [isVendorField, sourceData]);
-
-  // Fetch data for config-driven mode only
+  // Fetch Dropdown Items
   useEffect(() => {
-    if (isDirectMode) return;
-
     const fetchData = async () => {
-      if (!fetchDataFromConfig) return;
+      if (!config.fetch) return;
+
       setLoading(true);
       try {
-        const res = await fetchDataFromConfig();
-        setRawData(res?.data?.data || []);
-      } catch (err) {
-        console.error(`Error fetching ${fieldType}:`, err);
+        const res = await config.fetch();
+        setItems(res?.data || []);
+      } catch (fetchError) {
+        console.error(`Error fetching ${fieldType}:`, fetchError);
       } finally {
         setLoading(false);
       }
     };
+
     fetchData();
-  }, [fetchDataFromConfig, fieldType, isDirectMode]);
+  }, [config.fetch, fieldType]);
 
   useEffect(() => {
     if (!open || isLocked) return;
@@ -161,87 +81,46 @@ export const CustomDropdown = ({
     return () => window.cancelAnimationFrame(frame);
   }, [open, isLocked]);
 
-  const activeLevel = useMemo(() => {
-    return history.length > 0
-      ? history[history.length - 1].children
-      : visibleSourceData;
-  }, [history, visibleSourceData]);
-
-  const allSelectableValues = useMemo(() => {
+  const selectedValues = useMemo(() => {
     if (!isMulti) return [];
 
-    const flatten = (data) => {
-      if (!Array.isArray(data)) return [];
-
-      return data.reduce((acc, item) => {
-        acc.push(item);
-        if (item.children && Array.isArray(item.children)) {
-          acc.push(...flatten(item.children));
-        }
-        return acc;
-      }, []);
-    };
-
-    return [
-      ...new Set(
-        flatten(visibleSourceData)
-          .map((item) => String(item?.[config.valueKey] ?? "").trim())
-          .filter(Boolean),
-      ),
-    ];
-  }, [config.valueKey, isMulti, visibleSourceData]);
-
-  const selectedValueList = useMemo(() => {
-    if (!isMulti) return [];
-    return [
-      ...new Set(
-        (Array.isArray(value) ? value : [])
-          .map((item) => String(item ?? "").trim())
-          .filter(Boolean),
-      ),
-    ];
+    return [...new Set((Array.isArray(value) ? value : []).filter(Boolean))];
   }, [isMulti, value]);
 
-  const hasSelectedAll =
-    isMulti &&
-    allSelectableValues.length > 0 &&
-    allSelectableValues.every((item) => selectedValueList.includes(item));
+  const filteredItems = useMemo(() => {
+    if (!searchValue) return items;
 
-  const handleToggleSelectAll = () => {
-    if (isLocked || !isMulti || allSelectableValues.length === 0) return;
-
-    onChange(name, hasSelectedAll ? [] : allSelectableValues);
-  };
+    return items.filter((item) =>
+      String(item?.[config.labelKey] || "")
+        .toLowerCase()
+        .includes(searchValue.toLowerCase()),
+    );
+  }, [config.labelKey, items, searchValue]);
 
   const handleSelect = (itemId) => {
     if (isLocked) return;
 
     if (isMulti) {
-      let newValue = Array.isArray(value) ? [...value] : [];
+      const currentValues = Array.isArray(value) ? [...value] : [];
+      const nextValues = currentValues.includes(itemId)
+        ? currentValues.filter((currentValue) => currentValue !== itemId)
+        : [...currentValues, itemId];
 
-      if (newValue.includes(itemId)) {
-        newValue = newValue.filter((v) => v !== itemId);
-      } else {
-        newValue.push(itemId);
-      }
-
-      onChange(name, newValue);
+      onChange(name, nextValues);
       return;
-    } else {
-      onChange(name, itemId);
-      setOpen(false);
-      setHistory([]);
-      setSearchValue("");
     }
+
+    onChange(name, itemId);
+    setOpen(false);
+    setSearchValue("");
   };
 
-  const handleClear = (e) => {
+  const handleClear = (event) => {
     if (isLocked) return;
 
-    e.preventDefault();
-    e.stopPropagation();
+    event.preventDefault();
+    event.stopPropagation();
     onChange(name, isMulti ? [] : "");
-    setHistory([]);
     setSearchValue("");
   };
 
@@ -250,157 +129,70 @@ export const CustomDropdown = ({
 
     setIsCreating(true);
     try {
-      let newItem;
+      const payload = { [config.key]: searchValue };
+      const res = await config.create(payload);
+      const newItem = res?.data?.data;
 
-      if (isDirectMode && onCustomCreate) {
-        // Direct mode: call custom create handler
-        newItem = await onCustomCreate(searchValue);
-      } else if (config.create) {
-        // Config mode: use API create
-        const payload = { [config.labelKey]: searchValue };
-        const res = await config.create(payload);
-        newItem = res?.data?.data;
-      }
+      if (!newItem) return;
 
-      if (newItem) {
-        if (isDirectMode) {
-          setCreatedItems((prev) => [...prev, newItem]);
-        } else {
-          setRawData((prev) => [...prev, newItem]);
-        }
-
-        handleSelect(newItem[config.valueKey]);
-        setSearchValue("");
-      }
-    } catch (error) {
-      console.error(`Error creating ${fieldType || "option"}:`, error);
-      const message =
-        error?.response?.data?.message ||
-        error?.message ||
-        `Failed to create ${fieldType || "option"}`;
-      // toast.error(message);
+      setItems((prev) => [...prev, newItem]);
+      handleSelect(newItem[config.key]);
+      setSearchValue("");
+    } catch (createError) {
+      console.error(`Error creating ${fieldType}:`, createError);
     } finally {
       setIsCreating(false);
     }
   };
 
   const getSelectedLabel = () => {
-    const isLoadingState = isDirectMode ? isLoading : loading;
-    if (isLoadingState) return "Loading...";
+    if (loading) return "Loading...";
 
-    if (!value || (isMulti && value.length === 0)) {
-      return placeholder || config.placeholder;
+    if (!value || (isMulti && selectedValues.length === 0)) {
+      return placeholder;
     }
 
-    // Helper to find path in nested structure
-    const findPath = (data, targetId, path = []) => {
-      for (const item of data) {
-        const newPath = [...path, item];
-
-        if (String(item[config.valueKey]) === String(targetId)) {
-          return newPath;
-        }
-
-        if (item.children && Array.isArray(item.children)) {
-          const found = findPath(item.children, targetId, newPath);
-          if (found) return found;
-        }
-      }
-      return null;
-    };
-
-    // Multi-select case
     if (isMulti) {
-      const labels = [];
+      const labels = selectedValues
+        .map((selectedValue) =>
+          items.find(
+            (item) => String(item?.[config.valueKey]) === String(selectedValue),
+          ),
+        )
+        .filter(Boolean)
+        .map((item) => item[config.labelKey]);
 
-      value.forEach((val) => {
-        const path = findPath(sourceData, val);
-        if (!path) return;
-
-        const selected = path[path.length - 1];
-        const parent = path.length > 1 ? path[path.length - 2] : null;
-
-        if (parent) {
-          labels.push(
-            `${selected[config.labelKey]} in ${parent[config.labelKey]}`,
-          );
-        } else {
-          labels.push(selected[config.labelKey]);
-        }
-      });
-
-      if (labels.length > 2) {
-        return `${labels.length} selected`;
-      }
-
+      if (labels.length > 2) return `${labels.length} selected`;
       return labels.join(", ");
     }
 
-    // Single select case
-    const path = findPath(sourceData, value);
-    if (!path) return config.placeholder;
+    const selectedItem = items.find(
+      (item) => String(item?.[config.valueKey]) === String(value),
+    );
 
-    const selected = path[path.length - 1];
-    const parent = path.length > 1 ? path[path.length - 2] : null;
-
-    if (!parent) return selected[config.labelKey];
-
-    return {
-      parent: parent[config.labelKey],
-      child: selected[config.labelKey],
-    };
+    return selectedItem?.[config.labelKey] || config.placeholder;
   };
 
-  const displayItems = useMemo(() => {
-    if (!searchValue) return activeLevel;
-
-    const flatten = (data) => {
-      if (!Array.isArray(data)) return [];
-      return data.reduce((acc, item) => {
-        acc.push(item);
-        if (item.children && Array.isArray(item.children)) {
-          acc.push(...flatten(item.children));
-        }
-        return acc;
-      }, []);
-    };
-
-    const flattened = flatten(visibleSourceData);
-    return flattened
-      .filter((item) =>
-        String(item[config.labelKey] || "")
-          .toLowerCase()
-          .includes(searchValue.toLowerCase()),
-      )
-      .slice(0, 50);
-  }, [activeLevel, searchValue, visibleSourceData, config.labelKey]);
-
-  const currentLoading = isDirectMode ? isLoading : loading;
+  const hasValue = isMulti ? selectedValues.length > 0 : Boolean(value);
 
   return (
-    <Field className={cn("space-y-1.5 w-full", containerClass)}>
-      {label && (
-        <FieldLabel className="text-[11px] font-semibold uppercase tracking-[0.24em] text-muted-foreground">
-          {label}
-        </FieldLabel>
-      )}
+    <Field className={cn("w-full space-y-1.5", containerClass)}>
+      {label && <FieldLabel>{label}</FieldLabel>}
 
       <div
         className={cn(
-          "flex items-center overflow-hidden rounded-[18px] border bg-background/80 shadow-sm transition-all",
-          showError
-            ? "border-red-500/60 bg-red-500/5"
-            : "border-border/60 focus-within:border-primary/40 focus-within:ring-4 focus-within:ring-primary/10",
+          "flex items-center !m-0 overflow-hidden rounded-lg border border-border/60 bg-white shadow-[0_1px_2px_rgba(15,23,42,0.06)] transition-all focus-within:border-primary/40 focus-within:ring-2 focus-within:ring-primary/10",
+          open && "border-primary/40 ring-2 ring-primary/10",
+          showError && "border-red-500/60 ring-2 ring-red-500/10",
           isLocked && "cursor-default opacity-90",
         )}
       >
         <Popover
           open={isLocked ? false : open}
-          onOpenChange={(val) => {
+          onOpenChange={(nextOpen) => {
             if (isLocked) return;
-            setOpen(val);
-            if (!val) {
-              setHistory([]);
+            setOpen(nextOpen);
+            if (!nextOpen) {
               setSearchValue("");
             }
           }}
@@ -411,7 +203,7 @@ export const CustomDropdown = ({
             onBlur={onBlur}
             disabled={isLocked}
             className={cn(
-              "flex h-11 w-full items-center justify-between border-none bg-transparent px-4 py-3 text-sm shadow-none outline-none hover:bg-transparent focus:ring-0 focus:ring-offset-0",
+              "flex h-11 w-full items-center justify-between border-none bg-transparent px-4 py-3 text-sm shadow-none outline-none hover:bg-transparent focus-visible:outline-none",
               isLocked && "pointer-events-none cursor-default opacity-70",
             )}
           >
@@ -425,92 +217,52 @@ export const CustomDropdown = ({
               <span
                 className={cn(
                   "min-w-0 truncate",
-                  !value && "text-muted-foreground/70",
+                  !hasValue && "text-muted-foreground/70",
                 )}
               >
-                {(() => {
-                  const explicitLabel = String(
-                    selectedDisplayValue ?? "",
-                  ).trim();
-                  const labelValue = explicitLabel || getSelectedLabel();
-
-                  if (typeof labelValue === "string") {
-                    return <span className="truncate">{labelValue}</span>;
-                  }
-
-                  return (
-                    <span className="truncate">
-                      <span className="text-muted-foreground/70">
-                        {labelValue.child} in {labelValue.parent}
-                      </span>
-                    </span>
-                  );
-                })()}
+                <span className="truncate">{getSelectedLabel()}</span>
               </span>
             </div>
 
             <div className="flex items-center gap-1 shrink-0">
-              {value &&
-                (!isMulti ? value : value?.length > 0) &&
-                !isLocked &&
-                !currentLoading && (
-                  <div
-                    role="button"
-                    onClick={handleClear}
-                    className="p-1 mr-1 rounded-full hover:bg-secondary/70"
-                  >
-                    <X className="h-3.5 w-3.5 text-muted-foreground/70 hover:text-foreground" />
-                  </div>
-                )}
+              {hasValue && !isLocked && !loading && (
+                <div
+                  role="button"
+                  onClick={handleClear}
+                  className="p-1 mr-1 rounded-full hover:bg-secondary/70"
+                >
+                  <X className="h-3.5 w-3.5 text-muted-foreground/70 hover:text-foreground" />
+                </div>
+              )}
               {!isLocked && <ChevronsUpDown className="w-4 h-4 opacity-50" />}
             </div>
           </PopoverTrigger>
 
-          <PopoverContent className="w-[var(--radix-popover-trigger-width)] overflow-hidden rounded-[18px] border border-border/60 bg-popover/95 p-0 shadow-[0_24px_70px_rgba(15,23,42,0.16)] backdrop-blur-xl">
-            <div className="p-2 border-b border-border/60 bg-popover/95 backdrop-blur-xl">
-              <div className="flex items-center gap-2 rounded-[14px] border border-border/60 bg-background/80 px-3">
+          <PopoverContent className="w-[var(--radix-popover-trigger-width)] overflow-hidden rounded-lg border border-border/60 bg-white p-0 shadow-[0_24px_70px_rgba(15,23,42,0.16)]">
+            <div className="p-2 bg-white border-b border-border/60">
+              <div className="flex items-center gap-2 rounded-[14px] border border-border/60 bg-white px-3 shadow-[0_1px_2px_rgba(15,23,42,0.05)]">
                 <Search className="size-4 shrink-0 text-muted-foreground" />
                 <input
                   ref={searchInputRef}
                   type="text"
                   value={searchValue}
-                  onChange={(e) => setSearchValue(e.target.value)}
-                  onKeyDown={(e) => e.stopPropagation()}
-                  onKeyUp={(e) => e.stopPropagation()}
-                  onPointerDown={(e) => e.stopPropagation()}
-                  onClick={(e) => e.stopPropagation()}
-                  placeholder={`Search ${config.displayName}...`}
+                  onChange={(event) => setSearchValue(event.target.value)}
+                  onKeyDown={(event) => event.stopPropagation()}
+                  onKeyUp={(event) => event.stopPropagation()}
+                  onPointerDown={(event) => event.stopPropagation()}
+                  onClick={(event) => event.stopPropagation()}
+                  placeholder={searchPlaceholder}
                   readOnly={isLocked}
                   className="w-full text-sm bg-transparent outline-none h-9 placeholder:text-muted-foreground/60"
                 />
               </div>
             </div>
 
-            {isMulti &&
-              showSelectAll &&
-              !currentLoading &&
-              allSelectableValues.length > 0 && (
-                <div className="p-2 border-b border-border/60 bg-popover/95">
-                  <Button
-                    type="button"
-                    variant="secondary"
-                    className="w-full justify-start gap-2 rounded-[14px] text-primary hover:bg-primary/10"
-                    onClick={handleToggleSelectAll}
-                  >
-                    <Check className="w-4 h-4" />
-                    {hasSelectedAll
-                      ? "Clear all"
-                      : `Select all (${allSelectableValues.length})`}
-                  </Button>
-                </div>
-              )}
-
-            <div className="overflow-y-auto max-h-72">
-              {/* Add New option */}
+            <div className="p-1 overflow-y-auto bg-white max-h-72">
               {isAddNew &&
                 config.create &&
                 searchValue &&
-                displayItems.length === 0 && (
+                filteredItems.length === 0 && (
                   <div className="p-2 border-b border-border/60">
                     <Button
                       type="button"
@@ -529,56 +281,24 @@ export const CustomDropdown = ({
                   </div>
                 )}
 
-              {/* Back button for nested navigation */}
-              {!searchValue && history.length > 0 && (
-                <div className="px-3 py-2 border-b border-border/60 bg-muted/20">
-                  <div
-                    className="flex items-center gap-2 text-sm cursor-pointer text-muted-foreground hover:text-foreground"
-                    onClick={(e) => {
-                      if (isLocked) return;
-                      e.stopPropagation();
-                      setHistory((prev) => prev.slice(0, -1));
-                    }}
-                  >
-                    <ChevronLeft className="w-4 h-4" />
-                    <span>
-                      {history.length > 1
-                        ? history[history.length - 2][config.labelKey]
-                        : "All"}
-                    </span>
-                  </div>
-
-                  <div className="mt-1 text-sm font-semibold text-foreground">
-                    {history[history.length - 1][config.labelKey]}
-                  </div>
-                </div>
-              )}
-
-              {/* Loading state */}
-              {currentLoading && (
+              {loading && (
                 <div className="flex items-center justify-center py-8">
                   <Loader2 className="w-5 h-5 animate-spin text-muted-foreground" />
                 </div>
               )}
 
-              {/* Items list */}
-              {!currentLoading &&
-                displayItems.map((item) => {
+              {!loading &&
+                filteredItems.map((item) => {
+                  const itemValue = item[config.valueKey];
                   const isSelected = isMulti
-                    ? value?.includes(item[config.valueKey])
-                    : String(value) === String(item[config.valueKey]);
-
-                  const hasChildren = !searchValue && item.children?.length > 0;
+                    ? selectedValues.includes(itemValue)
+                    : String(value) === String(itemValue);
 
                   return (
                     <div
-                      key={item[config.valueKey]}
-                      onClick={() => handleSelect(item[config.valueKey])}
-                      className={cn(
-                        "group relative flex w-full cursor-pointer select-none items-center rounded-[14px] py-2 pl-9 pr-3 text-sm outline-none transition-colors",
-                        "hover:bg-secondary hover:text-foreground focus:bg-secondary focus:text-foreground",
-                        !isLocked && "cursor-pointer",
-                      )}
+                      key={itemValue}
+                      onClick={() => handleSelect(itemValue)}
+                      className="relative flex items-center w-full py-2 text-sm transition-colors rounded-md outline-none cursor-pointer select-none group px-9 hover:bg-black/10 hover:text-foreground focus:bg-accent focus:text-accent-foreground"
                     >
                       <div className="flex items-center flex-1 min-w-0 gap-2">
                         <span className="absolute left-3 flex h-3.5 w-3.5 items-center justify-center">
@@ -590,17 +310,6 @@ export const CustomDropdown = ({
                           {item[config.labelKey]}
                         </span>
                       </div>
-
-                      {hasChildren && (
-                        <ChevronRight
-                          className="w-4 h-4 cursor-pointer shrink-0 text-muted-foreground"
-                          onClick={(e) => {
-                            if (isLocked) return;
-                            e.stopPropagation();
-                            setHistory((prev) => [...prev, item]);
-                          }}
-                        />
-                      )}
                     </div>
                   );
                 })}
@@ -609,7 +318,7 @@ export const CustomDropdown = ({
         </Popover>
       </div>
 
-      {showError && <p className="text-xs text-red-600">⚠ {error}</p>}
+      {showError && <p className="text-xs text-red-600">{error}</p>}
       {!showError && helpText && (
         <p className="text-xs text-muted-foreground">{helpText}</p>
       )}

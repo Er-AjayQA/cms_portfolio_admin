@@ -1,6 +1,7 @@
 import { useFormik } from "formik";
 import * as yup from "yup";
 import { createProjectService } from "@/services/projects.services";
+import { useState } from "react";
 
 export const useProjectForm = () => {
   const categoryOptions = [
@@ -27,12 +28,11 @@ export const useProjectForm = () => {
     shortDescription: "",
     description: "",
     thumbnail: "",
-    images: [],
+    media: [],
     category: "",
     techStack: [],
     githubUrl: "",
     liveUrl: "",
-    videoUrl: "",
     featured: false,
     status: "",
     startDate: "",
