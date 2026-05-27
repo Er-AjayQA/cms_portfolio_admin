@@ -20,6 +20,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { RichTextEditor } from "@/components/common/RichTextEditor";
 
 export const ProjectFormPage = () => {
   const { formik, categoryOptions } = useProjectForm();
@@ -216,8 +217,6 @@ export const ProjectFormPage = () => {
                 name="shortDescription"
                 value={formik.values.shortDescription}
                 onChange={formik.handleChange}
-                autoComplete="off"
-                placeholder="eg: CRM Dashboard"
               />
               {formik.errors.shortDescription &&
                 formik.touched.shortDescription && (
@@ -227,12 +226,11 @@ export const ProjectFormPage = () => {
 
             <Field>
               <FieldLabel htmlFor="description">Description</FieldLabel>
-              <Textarea
-                name="description"
+              <RichTextEditor
                 value={formik.values.description}
-                onChange={formik.handleChange}
-                autoComplete="off"
-                placeholder="eg: CRM Dashboard"
+                onChange={(nextValue) =>
+                  formik.setFieldValue("description", nextValue)
+                }
               />
               {formik.errors.description && formik.touched.description && (
                 <FieldError>{formik.errors.description}</FieldError>
@@ -244,34 +242,24 @@ export const ProjectFormPage = () => {
           <FieldGroup className="grid grid-cols-1 gap-2">
             <Field>
               <FieldLabel htmlFor="challenges">Challenges</FieldLabel>
-              <Textarea
-                name="challenges"
+              <RichTextEditor
                 value={formik.values.challenges}
-                onChange={formik.handleChange}
-                autoComplete="off"
-                placeholder="eg: CRM Dashboard"
+                onChange={(nextValue) =>
+                  formik.setFieldValue("challenges", nextValue)
+                }
               />
-              {formik.errors.challenges && formik.touched.challenges && (
-                <FieldError>{formik.errors.challenges}</FieldError>
-              )}
             </Field>
 
             <Field>
               <FieldLabel htmlFor="solution">Solution</FieldLabel>
-              <Textarea
-                name="solution"
+              <RichTextEditor
                 value={formik.values.solution}
-                onChange={formik.handleChange}
-                autoComplete="off"
-                placeholder="eg: CRM Dashboard"
+                onChange={(nextValue) =>
+                  formik.setFieldValue("solution", nextValue)
+                }
               />
-              {formik.errors.solution && formik.touched.solution && (
-                <FieldError>{formik.errors.solution}</FieldError>
-              )}
             </Field>
           </FieldGroup>
-
-          <Editor />
 
           <Field orientation="horizontal" className="justify-end mt-5">
             <Button type="submit">Submit</Button>
