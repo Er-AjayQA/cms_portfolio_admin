@@ -65,7 +65,7 @@ export const ProjectListingPage = () => {
             <Button
               size="sm"
               variant="icon"
-              onClick={() => navigate(`/projects/view/${project._id}`)}
+              onClick={() => navigate(`/projects/view/${project.slug}`)}
             >
               <FaEye />
             </Button>
@@ -73,7 +73,7 @@ export const ProjectListingPage = () => {
             <Button
               size="sm"
               variant="icon"
-              onClick={() => navigate(`/projects/edit/${project._id}`)}
+              onClick={() => navigate(`/projects/edit/${project.slug}`)}
             >
               <FaRegEdit />
             </Button>

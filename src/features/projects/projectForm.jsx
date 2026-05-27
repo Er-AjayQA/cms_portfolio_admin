@@ -10,7 +10,7 @@ import {
 import { useProjectForm } from "./useProjectForm";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { Textarea } from "@/components/ui/textarea";
 import { CustomDropdown } from "@/components/common/CustomDropdown";
 import { ImageIcon, Images, Trash2, Upload, Video } from "lucide-react";
@@ -23,6 +23,8 @@ import {
 } from "@/components/ui/select";
 import { RichTextEditor } from "@/components/common/RichTextEditor";
 import { Label } from "@/components/ui/label";
+import { Switch } from "@/components/ui/switch";
+import { useEffect } from "react";
 
 export const ProjectFormPage = () => {
   const {
@@ -34,14 +36,30 @@ export const ProjectFormPage = () => {
     clearThumbnail,
     handleMediaChange,
     removeMediaItem,
+    handleGetProjectDetail,
   } = useProjectForm();
   const navigate = useNavigate();
+  const param = useParams();
+  const isEditMode = Boolean(param?.slug);
+  const thumbnailName =
+    formik.values.thumbnail?.name ||
+    (typeof formik.values.thumbnail === "string"
+      ? formik.values.thumbnail.split("/").pop()
+      : "");
+
+  useEffect(() => {
+    if (param?.slug) {
+      handleGetProjectDetail(param?.slug);
+    }
+  }, [param?.slug]);
 
   return (
     <div>
       <form onSubmit={formik.handleSubmit}>
         <FieldSet>
-          <FieldLegend>Add Project</FieldLegend>
+          <FieldLegend>
+            {isEditMode ? "Edit Project" : "Add Project"}
+          </FieldLegend>
           <FieldDescription>
             This project will appear in your projects section.
           </FieldDescription>
@@ -218,6 +236,42 @@ export const ProjectFormPage = () => {
             />
           </FieldGroup>
 
+          <FieldGroup className="grid grid-cols-2 gap-5">
+            <Field>
+              <FieldLabel htmlFor="status">Status</FieldLabel>
+              <Select
+                value={formik.values.status}
+                onValueChange={(nextValue) =>
+                  formik.setFieldValue("status", nextValue)
+                }
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Select status" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="draft">Draft</SelectItem>
+                  <SelectItem value="published">Published</SelectItem>
+                </SelectContent>
+              </Select>
+            </Field>
+
+            <Field className="justify-end">
+              <FieldLabel htmlFor="featured">Featured</FieldLabel>
+              <div className="flex h-11 items-center gap-3 rounded-lg border border-border/60 bg-white px-4 shadow-sm">
+                <Switch
+                  id="featured"
+                  checked={formik.values.featured}
+                  onCheckedChange={(checked) =>
+                    formik.setFieldValue("featured", checked)
+                  }
+                />
+                <span className="text-sm text-slate-600">
+                  {formik.values.featured ? "Featured" : "Not featured"}
+                </span>
+              </div>
+            </Field>
+          </FieldGroup>
+
           {/* Row 6 */}
           <FieldGroup className="grid grid-cols-1 gap-2">
             <Field>
@@ -316,10 +370,7 @@ export const ProjectFormPage = () => {
                 <div className="flex items-center justify-between gap-3 px-4 py-3">
                   <div className="flex items-center gap-2 text-sm text-slate-600">
                     <Upload className="size-4" />
-                    <span>
-                      {formik.values.thumbnail?.name ||
-                        "No thumbnail selected yet"}
-                    </span>
+                    <span>{thumbnailName || "No thumbnail selected yet"}</span>
                   </div>
                   {thumbnailPreview ? (
                     <Button

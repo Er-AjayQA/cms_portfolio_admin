@@ -17,6 +17,7 @@ const FIELD_CONFIGS = {
   techStack: {
     fetch: getAllTechStackService,
     create: createTechStackService,
+    createKey: "name",
     labelKey: "name",
     valueKey: "_id",
   },
@@ -129,14 +130,14 @@ export const CustomDropdown = ({
 
     setIsCreating(true);
     try {
-      const payload = { [config.key]: searchValue };
+      const payload = { [config.createKey || config.labelKey]: searchValue };
       const res = await config.create(payload);
       const newItem = res?.data?.data;
 
       if (!newItem) return;
 
       setItems((prev) => [...prev, newItem]);
-      handleSelect(newItem[config.key]);
+      handleSelect(newItem[config.valueKey]);
       setSearchValue("");
     } catch (createError) {
       console.error(`Error creating ${fieldType}:`, createError);

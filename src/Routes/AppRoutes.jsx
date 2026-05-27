@@ -20,8 +20,14 @@ export const Router = () => {
               {/* Projects Routes */}
               <Route path="/projects" element={<ProjectListingPage />} />
               <Route path="/projects/create" element={<ProjectFormPage />} />
-              <Route path="/projects/edit/:id" element={<ProjectFormPage />} />
-              <Route path="/projects/view/:id" element={<ProjectFormPage />} />
+              <Route
+                path="/projects/edit/:slug"
+                element={<ProjectFormPage />}
+              />
+              <Route
+                path="/projects/view/:slug"
+                element={<ProjectFormPage />}
+              />
 
               <Route path="/settings" element={<div>Settings</div>} />
             </Route>

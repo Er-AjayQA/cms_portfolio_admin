@@ -90,7 +90,7 @@ export function DataTable({ columns, data }) {
             onChange={(event) =>
               table.getColumn("title")?.setFilterValue(event.target.value)
             }
-            className="max-w-sm"
+            className="max-w-sm h-9"
           />
 
           <DropdownMenu>

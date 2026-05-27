@@ -12,13 +12,15 @@ export const createProjectService = async (data) => {
     formData.append("githubUrl", data.githubUrl || "");
     formData.append("liveUrl", data.liveUrl || "");
     formData.append("featured", String(Boolean(data.featured)));
+    formData.append("status", data.status || "draft");
     formData.append("startDate", data.startDate || "");
     formData.append("endDate", data.endDate || "");
     formData.append("clientName", data.clientName || "");
     formData.append("role", data.role || "");
     formData.append("challenges", data.challenges || "");
     formData.append("solution", data.solution || "");
-    formData.append("techStack", JSON.stringify(data.techStackId || []));
+    formData.append("order", data.order || 0);
+    formData.append("techStackId", JSON.stringify(data.techStackId || []));
 
     if (data.thumbnail instanceof File) {
       formData.append("thumbnail", data.thumbnail);
@@ -27,7 +29,9 @@ export const createProjectService = async (data) => {
     }
 
     (data.media || []).forEach((file) => {
-      formData.append("media", file);
+      if (file instanceof File) {
+        formData.append("media", file);
+      }
     });
 
     const response = await api.post("/project/create", formData);
@@ -40,6 +44,15 @@ export const createProjectService = async (data) => {
 export const getAllProjectsService = async () => {
   try {
     const response = await api.get("/projects");
+    return response?.data;
+  } catch (error) {
+    throw error.response ? error.response.data : error;
+  }
+};
+
+export const getBySlugProjectService = async (slug) => {
+  try {
+    const response = await api.get(`/projects/${slug}`);
     return response?.data;
   } catch (error) {
     throw error.response ? error.response.data : error;

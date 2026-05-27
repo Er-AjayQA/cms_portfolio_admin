@@ -3,7 +3,9 @@ import * as yup from "yup";
 import {
   createProjectService,
   getAllProjectsService,
+  getBySlugProjectService,
 } from "@/services/projects.services";
+import { API_BASE_URL } from "@/services/api";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -42,16 +44,20 @@ export const useProjectForm = () => {
     githubUrl: "",
     liveUrl: "",
     featured: false,
+    status: "draft",
     startDate: "",
     endDate: "",
     clientName: "",
     role: "",
     challenges: "",
     solution: "",
+    order: 0,
   };
 
   const [projectsLoading, setProjectsLoading] = useState(false);
   const [allProjects, setAllProjects] = useState([]);
+  const [projectDetailLoading, setProjectDetailLoading] = useState(false);
+  const [projectDetail, setProjectDetail] = useState(null);
   const [thumbnailPreview, setThumbnailPreview] = useState("");
   const [mediaPreviews, setMediaPreviews] = useState([]);
   const thumbnailPreviewRef = useRef("");
@@ -66,6 +72,26 @@ export const useProjectForm = () => {
       console.error("Error fetching projects:", error);
     } finally {
       setProjectsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchAllProjects();
+  }, []);
+
+  const fetchBySlugProject = async (slug) => {
+    try {
+      setProjectDetailLoading(true);
+      const response = await getBySlugProjectService(slug);
+      const data = response?.data || null;
+
+      setProjectDetail(data);
+      return data;
+    } catch (error) {
+      console.error("Error fetching project detail:", error);
+      return null;
+    } finally {
+      setProjectDetailLoading(false);
     }
   };
 
@@ -86,6 +112,33 @@ export const useProjectForm = () => {
     if (url?.startsWith("blob:")) {
       URL.revokeObjectURL(url);
     }
+  };
+
+  const getAssetUrl = (url) => {
+    if (!url || url instanceof File) return "";
+    if (/^(blob:|data:|https?:\/\/)/i.test(url)) return url;
+    return `${API_BASE_URL}${url.startsWith("/") ? "" : "/"}${url}`;
+  };
+
+  const getFileNameFromUrl = (url, fallback) => {
+    if (!url || typeof url !== "string") return fallback;
+    return decodeURIComponent(url.split("/").pop() || fallback);
+  };
+
+  const formatDateForInput = (value) => {
+    if (!value) return "";
+    if (typeof value === "string") return value.slice(0, 10);
+
+    const date = new Date(value);
+    return Number.isNaN(date.getTime()) ? "" : date.toISOString().slice(0, 10);
+  };
+
+  const normalizeTechStackIds = (techStack = []) => {
+    if (!Array.isArray(techStack)) return [];
+
+    return techStack
+      .map((item) => (typeof item === "object" ? item?._id || item?.id : item))
+      .filter(Boolean);
   };
 
   useEffect(() => {
@@ -157,9 +210,51 @@ export const useProjectForm = () => {
     );
   };
 
-  useEffect(() => {
-    fetchAllProjects();
-  }, []);
+  const handleGetProjectDetail = async (slug) => {
+    try {
+      const projectData = await fetchBySlugProject(slug);
+
+      if (projectData) {
+        formik.setValues({
+          title: projectData.title || "",
+          slug: projectData.slug || "",
+          shortDescription: projectData.shortDescription || "",
+          description: projectData.description || "",
+          thumbnail: projectData.thumbnail || "",
+          media: projectData.media || [],
+          category: projectData.category || "",
+          techStackId: normalizeTechStackIds(projectData.techStackId),
+          githubUrl: projectData.githubUrl || "",
+          liveUrl: projectData.liveUrl || "",
+          featured: Boolean(projectData.featured),
+          status: projectData.status || "draft",
+          startDate: formatDateForInput(projectData.startDate),
+          endDate: formatDateForInput(projectData.endDate),
+          clientName: projectData.clientName || "",
+          role: projectData.role || "",
+          challenges: projectData.challenges || "",
+          solution: projectData.solution || "",
+          order: projectData.order ?? 0,
+        });
+
+        setThumbnailPreview(getAssetUrl(projectData.thumbnail));
+
+        setMediaPreviews(
+          (projectData.media || []).map((item, index) => ({
+            id: item._id || item.id || `media-${index}`,
+            preview: getAssetUrl(item.url || item),
+            type: item.type?.startsWith?.("video") ? "video" : "image",
+            name:
+              item.name ||
+              getFileNameFromUrl(item.url || item, `Media ${index + 1}`),
+            file: null,
+          })),
+        );
+      }
+    } catch (error) {
+      console.error("Error fetching project detail:", error);
+    }
+  };
 
   return {
     formik,
@@ -174,5 +269,8 @@ export const useProjectForm = () => {
     setProjectsLoading,
     allProjects,
     setAllProjects,
+    handleGetProjectDetail,
+    projectDetailLoading,
+    projectDetail,
   };
 };
