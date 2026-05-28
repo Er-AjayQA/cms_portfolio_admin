@@ -35,75 +35,82 @@ export const AppSidebar = () => {
   return (
     <Sidebar
       collapsible="icon"
-      className="bg-white border-none shadow-lg"
+      className="bg-transparent border-none basis-1"
       side="left"
       variant="sidebar"
     >
-      <SidebarHeader className="drop-shadow-md shadow-md px-3 py-4 group-data-[collapsible=icon]:px-2">
-        <div className="flex items-center gap-3 rounded-2xl bg-sidebar-accent px-3 py-3 group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:px-0">
-          <div className="flex items-center justify-center size-10 shrink-0 rounded-xl bg-sidebar-primary text-sidebar-primary-foreground">
-            <Sparkles className="size-4" />
+      <div className="flex h-[calc(100vh-1.5rem)] flex-col overflow-hidden border border-slate-800/40 bg-[linear-gradient(180deg,#172033_0%,#1f2937_100%)] shadow-[0_24px_70px_-38px_rgba(15,23,42,0.85)]">
+        <SidebarHeader className="py-4 group-data-[collapsible=icon]:px-2">
+          <div className="flex items-center gap-3 rounded-2xl border border-white/10 bg-white/5 px-3 py-3 group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:px-0">
+            <div className="flex items-center justify-center size-10 shrink-0 rounded-xl bg-sidebar-primary text-sidebar-primary-foreground">
+              <Sparkles className="size-4" stroke="white" />
+            </div>
+            <div className="min-w-0 group-data-[collapsible=icon]:hidden">
+              <p className="text-sm font-semibold text-white truncate">
+                Portfolio CMS
+              </p>
+              <p className="text-xs truncate text-slate-300">Admin workspace</p>
+            </div>
           </div>
-          <div className="min-w-0 group-data-[collapsible=icon]:hidden">
-            <p className="text-sm font-semibold truncate">Portfolio CMS</p>
-            <p className="text-xs truncate text-sidebar-foreground/70">
-              Admin workspace
-            </p>
-          </div>
-        </div>
-      </SidebarHeader>
+        </SidebarHeader>
 
-      <SidebarSeparator />
+        <SidebarSeparator className="bg-white/10" />
 
-      <SidebarContent className="py-2">
-        <SidebarGroup className="px-2">
-          <SidebarGroupLabel>Navigation</SidebarGroupLabel>
+        <SidebarContent className="py-2">
+          <SidebarGroup className="px-2">
+            <SidebarGroupLabel className="px-3 text-[11px] uppercase tracking-[0.24em] text-slate-400">
+              Navigation
+            </SidebarGroupLabel>
 
-          <SidebarGroupContent>
-            <SidebarMenu className="gap-1">
-              {navigationItems.map((item) => (
-                <SidebarMenuItem key={item.path}>
-                  <SidebarMenuButton
-                    asChild
-                    tooltip={item.name}
-                    isActive={location.pathname === item.path}
-                    size="lg"
-                    className="rounded-xl group-data-[collapsible=icon]:justify-center"
-                  >
-                    <NavLink to={item.path}>
-                      <item.icon />
-                      <span className="group-data-[collapsible=icon]:hidden">
-                        {item.name}
-                      </span>
-                    </NavLink>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
-      </SidebarContent>
+            <SidebarGroupContent>
+              <SidebarMenu className="gap-1.5">
+                {navigationItems.map((item) => (
+                  <SidebarMenuItem key={item.path}>
+                    <SidebarMenuButton
+                      asChild
+                      tooltip={item.name}
+                      isActive={location.pathname === item.path}
+                      size="lg"
+                      className="rounded-xl text-slate-300 transition-all hover:bg-white/8 hover:text-white data-[active=true]:bg-white/10 data-[active=true]:text-white data-[active=true]:shadow-none group-data-[collapsible=icon]:justify-center"
+                    >
+                      <NavLink
+                        to={item.path}
+                        className="flex items-center w-full gap-2 text-inherit"
+                      >
+                        <item.icon />
+                        <span className="group-data-[collapsible=icon]:hidden">
+                          {item.name}
+                        </span>
+                      </NavLink>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                ))}
+              </SidebarMenu>
+            </SidebarGroupContent>
+          </SidebarGroup>
+        </SidebarContent>
 
-      <SidebarSeparator />
+        <SidebarSeparator className="bg-white/10" />
 
-      <SidebarFooter className="p-3 group-data-[collapsible=icon]:px-2">
-        <SidebarMenu className="gap-1">
-          <SidebarMenuItem>
-            <SidebarMenuButton
-              tooltip="Logout"
-              onClick={logout}
-              size="lg"
-              className="rounded-xl group-data-[collapsible=icon]:justify-center"
-            >
-              <LogOut />
-              <span className="group-data-[collapsible=icon]:hidden">
-                Logout
-              </span>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
-        </SidebarMenu>
-      </SidebarFooter>
-      <SidebarRail />
+        <SidebarFooter className="mt-auto p-3 group-data-[collapsible=icon]:px-2">
+          <SidebarMenu className="gap-1">
+            <SidebarMenuItem>
+              <SidebarMenuButton
+                tooltip="Logout"
+                onClick={logout}
+                size="lg"
+                className="rounded-xl text-slate-300 hover:bg-white/8 hover:text-white group-data-[collapsible=icon]:justify-center"
+              >
+                <LogOut />
+                <span className="group-data-[collapsible=icon]:hidden">
+                  Logout
+                </span>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+          </SidebarMenu>
+        </SidebarFooter>
+        <SidebarRail />
+      </div>
     </Sidebar>
   );
 };

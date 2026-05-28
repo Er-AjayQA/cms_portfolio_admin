@@ -12,13 +12,13 @@ export const Layout = () => {
         "--sidebar-width-icon": "4.5rem",
       }}
     >
-      <div className="flex min-h-screen w-full bg-[#f6f7fb]">
+      <div className="flex w-full min-h-screen bg-transparent">
         <AppSidebar />
-        <SidebarInset className="min-h-screen bg-[#f6f7fb] transition-[margin] duration-200 ease-linear">
-          <div className="flex min-h-screen flex-col">
+        <SidebarInset className="basis-2 min-h-screen bg-transparent transition-[margin] duration-200 ease-linear">
+          <div className="flex flex-col min-h-screen">
             <Header />
-            <main className="flex-1 p-4 md:p-6">
-              <div className="flex min-h-[calc(100vh-10rem)] w-full flex-col rounded-[1.5rem] border border-slate-200 bg-white p-4 shadow-sm md:p-6">
+            <main className="flex-1 px-4 pb-4 md:px-6 md:pb-6">
+              <div className="flex min-h-[calc(100vh-7rem)] w-full flex-col rounded-[1.75rem] border border-slate-200/70 bg-white/92 p-4 shadow-[0_20px_55px_-42px_rgba(15,23,42,0.28)] backdrop-blur md:p-6">
                 <Outlet />
               </div>
             </main>

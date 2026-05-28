@@ -6,6 +6,8 @@ import { useNavigate } from "react-router-dom";
 import { MdOutlineDeleteForever } from "react-icons/md";
 import { FaRegEdit, FaEye } from "react-icons/fa";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Badge } from "@/components/ui/badge";
+import { FolderKanban, Layers3, Rocket } from "lucide-react";
 
 export const ProjectListingPage = () => {
   const navigate = useNavigate();
@@ -55,24 +57,37 @@ export const ProjectListingPage = () => {
     },
     {
       accessorKey: "status",
-      header: "Status",
-      cell: ({ row }) => {
-        const project = row.original;
-
-        return project?.status === "draft" ? "Draft" : "Published";
-      },
-    },
-    {
-      id: "actions",
-      header: "Actions",
+      header: () => <div className="text-center">Status</div>,
       cell: ({ row }) => {
         const project = row.original;
 
         return (
-          <div className="flex gap-1">
+          <div className="flex justify-center">
+            {project?.status === "draft" ? (
+              <Badge className="px-3 py-1 border rounded-full border-amber-200 bg-amber-50 text-amber-700 hover:bg-amber-50">
+                Draft
+              </Badge>
+            ) : (
+              <Badge className="px-3 py-1 border rounded-full border-emerald-200 bg-emerald-50 text-emerald-700 hover:bg-emerald-50">
+                Published
+              </Badge>
+            )}
+          </div>
+        );
+      },
+    },
+    {
+      id: "actions",
+      header: () => <div className="text-center">Actions</div>,
+      cell: ({ row }) => {
+        const project = row.original;
+
+        return (
+          <div className="flex justify-center gap-1">
             <Button
               size="sm"
-              variant="icon"
+              variant="outline"
+              className="bg-white rounded-xl border-slate-200 text-slate-600 hover:bg-slate-50"
               onClick={() => navigate(`/projects/view/${project.slug}`)}
             >
               <FaEye />
@@ -80,7 +95,8 @@ export const ProjectListingPage = () => {
 
             <Button
               size="sm"
-              variant="icon"
+              variant="outline"
+              className="bg-white rounded-xl border-slate-200 text-slate-600 hover:bg-slate-50"
               onClick={() => navigate(`/projects/edit/${project.slug}`)}
             >
               <FaRegEdit />
@@ -88,7 +104,8 @@ export const ProjectListingPage = () => {
 
             <Button
               size="sm"
-              variant="icon"
+              variant="outline"
+              className="rounded-xl border-rose-200 bg-rose-50 text-rose-600 hover:bg-rose-100 hover:text-rose-700"
               onClick={() => handleDeleteProject(project._id)}
             >
               <MdOutlineDeleteForever />
@@ -103,7 +120,7 @@ export const ProjectListingPage = () => {
     <div className="space-y-5">
       <HeroShell
         title="Projects"
-        description="Manage your projects here"
+        description="Organize, review, and update your portfolio projects from one clean workspace."
         buttonLabel="Create Project"
         buttonRoute="/projects/create"
       />

@@ -60,14 +60,19 @@ export const ProjectFormPage = () => {
   return (
     <div>
       <form onSubmit={formik.handleSubmit}>
-        <FieldSet>
-          <FieldLegend>{pageTitle()}</FieldLegend>
-          <FieldDescription>
+        <FieldSet className="gap-6">
+          <div className="rounded-[1.75rem] border border-white/60 bg-[linear-gradient(135deg,rgba(15,23,42,0.95)_0%,rgba(51,65,85,0.94)_65%,rgba(120,53,15,0.8)_100%)] p-6 text-white shadow-[0_28px_70px_-38px_rgba(15,23,42,0.9)]">
+          <FieldLegend className="text-2xl font-semibold tracking-tight text-white">
+            {pageTitle()}
+          </FieldLegend>
+          <FieldDescription className="max-w-2xl text-slate-200">
             This project will appear in your projects section.
           </FieldDescription>
+          </div>
 
           {/* Row 1 */}
-          <FieldGroup className="grid grid-cols-2 gap-5">
+          <div className="space-y-6 rounded-[1.75rem] border border-white/60 bg-white/75 p-5 shadow-[0_20px_50px_-34px_rgba(15,23,42,0.75)] backdrop-blur md:p-6">
+          <FieldGroup className="grid gap-5 md:grid-cols-2">
             <Field>
               <FieldLabel htmlFor="title">Project Title</FieldLabel>
               <Input
@@ -100,7 +105,7 @@ export const ProjectFormPage = () => {
           </FieldGroup>
 
           {/* Row 2 */}
-          <FieldGroup className="grid grid-cols-2 gap-5">
+          <FieldGroup className="grid gap-5 md:grid-cols-2">
             <Field>
               <FieldLabel htmlFor="role">Role</FieldLabel>
               <Input
@@ -133,7 +138,7 @@ export const ProjectFormPage = () => {
           </FieldGroup>
 
           {/* Row 3 */}
-          <FieldGroup className="grid grid-cols-2 gap-5">
+          <FieldGroup className="grid gap-5 md:grid-cols-2">
             <Field>
               <FieldLabel htmlFor="startDate">Start Date</FieldLabel>
               <Input
@@ -166,7 +171,7 @@ export const ProjectFormPage = () => {
           </FieldGroup>
 
           {/* Row 4 */}
-          <FieldGroup className="grid grid-cols-2 gap-5">
+          <FieldGroup className="grid gap-5 md:grid-cols-2">
             <Field>
               <FieldLabel htmlFor="githubUrl">Git Repository</FieldLabel>
               <Input
@@ -199,7 +204,7 @@ export const ProjectFormPage = () => {
           </FieldGroup>
 
           {/* Row 5 */}
-          <FieldGroup className="grid grid-cols-2 gap-5">
+          <FieldGroup className="grid gap-5 md:grid-cols-2">
             <Field>
               <FieldLabel htmlFor="category">Category</FieldLabel>
               <Select
@@ -239,7 +244,7 @@ export const ProjectFormPage = () => {
           </FieldGroup>
 
           {/* Row 6 */}
-          <FieldGroup className="grid grid-cols-2 gap-5">
+          <FieldGroup className="grid gap-5 md:grid-cols-2">
             <Field>
               <FieldLabel htmlFor="status">Status</FieldLabel>
               <Select
@@ -283,7 +288,7 @@ export const ProjectFormPage = () => {
           </FieldGroup>
 
           {/* Row 7 */}
-          <FieldGroup className="grid grid-cols-1 gap-2">
+          <FieldGroup className="grid grid-cols-1 gap-3">
             <Field>
               <FieldLabel htmlFor="shortDescription">
                 Short Description
@@ -314,7 +319,7 @@ export const ProjectFormPage = () => {
           </FieldGroup>
 
           {/* Row 8 */}
-          <FieldGroup className="grid grid-cols-1 gap-2">
+          <FieldGroup className="grid grid-cols-1 gap-3">
             <Field>
               <FieldLabel htmlFor="challenges">Challenges</FieldLabel>
               <RichTextEditor
@@ -337,13 +342,13 @@ export const ProjectFormPage = () => {
           </FieldGroup>
 
           {/* Row 9 */}
-          <FieldGroup className="grid grid-cols-2 gap-5">
+          <FieldGroup className="grid gap-5 md:grid-cols-2">
             <Field>
               <FieldLabel htmlFor="thumbnail">Upload Thumbnail</FieldLabel>
-              <div className="overflow-hidden bg-white border rounded-lg shadow-sm border-border/60">
+              <div className="overflow-hidden rounded-[1.5rem] border border-border/60 bg-[linear-gradient(180deg,#ffffff_0%,#f8fafc_100%)] shadow-[0_16px_40px_-34px_rgba(15,23,42,0.8)]">
                 <Label
                   htmlFor="thumbnail"
-                  className="flex min-h-[230px] cursor-pointer flex-col items-center justify-center gap-3 border-b border-dashed border-border/70 bg-[radial-gradient(circle_at_top,_rgba(59,130,246,0.08),_transparent_42%),linear-gradient(180deg,_#ffffff_0%,_#f8fafc_100%)] p-6 text-center transition-colors hover:bg-slate-50"
+                  className="flex min-h-[230px] cursor-pointer flex-col items-center justify-center gap-3 border-b border-dashed border-border/70 bg-[radial-gradient(circle_at_top,_rgba(15,23,42,0.08),_transparent_45%),radial-gradient(circle_at_bottom_right,_rgba(217,119,6,0.12),_transparent_25%),linear-gradient(180deg,_#ffffff_0%,_#f8fafc_100%)] p-6 text-center transition-colors hover:bg-slate-50"
                 >
                   {thumbnailPreview ? (
                     <img
@@ -352,7 +357,7 @@ export const ProjectFormPage = () => {
                       className="object-cover w-full h-40 rounded-lg shadow-sm"
                     />
                   ) : (
-                    <div className="flex items-center justify-center rounded-full size-14 bg-slate-100 text-slate-600">
+                    <div className="flex items-center justify-center rounded-full size-14 bg-slate-100 text-slate-700">
                       <ImageIcon className="size-6" />
                     </div>
                   )}
@@ -402,10 +407,10 @@ export const ProjectFormPage = () => {
 
             <Field>
               <FieldLabel htmlFor="media">Gallery</FieldLabel>
-              <div className="overflow-hidden bg-white border rounded-lg shadow-sm border-border/60">
+              <div className="overflow-hidden rounded-[1.5rem] border border-border/60 bg-[linear-gradient(180deg,#ffffff_0%,#f8fafc_100%)] shadow-[0_16px_40px_-34px_rgba(15,23,42,0.8)]">
                 <Label
                   htmlFor="media"
-                  className="flex min-h-[230px] cursor-pointer flex-col items-center justify-center gap-3 border-b border-dashed border-border/70 bg-[radial-gradient(circle_at_top,_rgba(14,165,233,0.08),_transparent_42%),linear-gradient(180deg,_#ffffff_0%,_#f8fafc_100%)] p-6 text-center transition-colors hover:bg-slate-50"
+                  className="flex min-h-[230px] cursor-pointer flex-col items-center justify-center gap-3 border-b border-dashed border-border/70 bg-[radial-gradient(circle_at_top,_rgba(8,145,178,0.1),_transparent_42%),radial-gradient(circle_at_bottom_right,_rgba(15,23,42,0.08),_transparent_26%),linear-gradient(180deg,_#ffffff_0%,_#f8fafc_100%)] p-6 text-center transition-colors hover:bg-slate-50"
                 >
                   <div className="flex items-center justify-center rounded-full size-14 bg-slate-100 text-slate-600">
                     <Images className="size-6" />
@@ -432,13 +437,13 @@ export const ProjectFormPage = () => {
 
                 <div className="px-4 py-3">
                   {mediaPreviews.length > 0 ? (
-                    <div className="grid grid-cols-4 gap-3">
+                    <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
                       {mediaPreviews.map((item) => (
                         <div
                           key={item.id}
-                          className="overflow-hidden border rounded-lg border-border/60 bg-slate-50"
+                          className="overflow-hidden rounded-xl border border-border/60 bg-slate-50"
                         >
-                          <div className="relative w-full h-28 bg-slate-100">
+                          <div className="relative h-28 w-full bg-slate-100">
                             {item.type === "video" ? (
                               <video
                                 src={item.preview}
@@ -491,10 +496,11 @@ export const ProjectFormPage = () => {
           </FieldGroup>
 
           {/* Action Buttons */}
-          <Field orientation="horizontal" className="justify-end mt-5">
+          <Field orientation="horizontal" className="mt-6 justify-end">
             <Button
-              variant="default"
+              variant="outline"
               type="button"
+              className="h-11 rounded-2xl border-slate-200 bg-white px-5"
               onClick={() => {
                 resetForm();
                 navigate("/projects");
@@ -502,10 +508,11 @@ export const ProjectFormPage = () => {
             >
               Cancel
             </Button>
-            <Button type="submit">
+            <Button type="submit" className="h-11 rounded-2xl px-5">
               {isEditMode ? "Update Project" : "Create Project"}
             </Button>
           </Field>
+          </div>
         </FieldSet>
       </form>
     </div>
