@@ -534,9 +534,11 @@ export const ProjectFormPage = () => {
               >
                 Cancel
               </Button>
-              <Button type="submit" variant="default">
-                {isEditMode ? "Update Project" : "Create Project"}
-              </Button>
+              {!isViewMode && (
+                <Button type="submit" variant="default">
+                  {isEditMode ? "Update Project" : "Create Project"}
+                </Button>
+              )}
             </Field>
           </CardContent>
         </Card>
