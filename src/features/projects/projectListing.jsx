@@ -3,13 +3,14 @@ import { useProjectForm } from "./useProjectForm";
 import { DataTable } from "@/components/ui/data-table";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
-import { Eye, SquarePen } from "lucide-react";
+import { MdOutlineDeleteForever } from "react-icons/md";
 import { FaRegEdit, FaEye } from "react-icons/fa";
 import { Checkbox } from "@/components/ui/checkbox";
 
 export const ProjectListingPage = () => {
   const navigate = useNavigate();
-  const { projectsLoading, allProjects } = useProjectForm();
+  const { projectsLoading, allProjects, handleDeleteProject } =
+    useProjectForm();
   const columns = [
     {
       id: "select",
@@ -76,6 +77,14 @@ export const ProjectListingPage = () => {
               onClick={() => navigate(`/projects/edit/${project.slug}`)}
             >
               <FaRegEdit />
+            </Button>
+
+            <Button
+              size="sm"
+              variant="icon"
+              onClick={() => handleDeleteProject(project._id)}
+            >
+              <MdOutlineDeleteForever />
             </Button>
           </div>
         );

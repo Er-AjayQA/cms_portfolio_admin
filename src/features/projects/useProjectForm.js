@@ -2,15 +2,19 @@ import { useFormik } from "formik";
 import * as yup from "yup";
 import {
   createProjectService,
+  deleteProjectService,
   getAllProjectsService,
   getBySlugProjectService,
+  updateProjectService,
 } from "@/services/projects.services";
 import { API_BASE_URL } from "@/services/api";
 import { useEffect, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 export const useProjectForm = () => {
   const navigate = useNavigate();
+  const params = useParams();
+  const isEditMode = Boolean(params?.slug);
 
   const [projectsLoading, setProjectsLoading] = useState(false);
   const [allProjects, setAllProjects] = useState([]);
@@ -21,7 +25,6 @@ export const useProjectForm = () => {
   const thumbnailPreviewRef = useRef("");
   const mediaPreviewsRef = useRef([]);
 
-  const statusOptions = ["draft", "published"];
   const featuredOptions = [
     { label: "Featured", value: "true" },
     { label: "Not Featured", value: "false" },
@@ -105,9 +108,15 @@ export const useProjectForm = () => {
     validationSchema: projectSchema,
     onSubmit: async (values, helpers) => {
       try {
-        await createProjectService(values);
+        if (isEditMode && params?.slug) {
+          await updateProjectService(params.slug, values);
+        } else {
+          await createProjectService(values);
+        }
+
         navigate("/projects", { replace: true });
-      } catch {
+      } catch (error) {
+        console.error("Error saving project:", error);
         helpers.setSubmitting(false);
       }
     },
@@ -199,19 +208,19 @@ export const useProjectForm = () => {
   };
 
   const removeMediaItem = (mediaIdToRemove) => {
-    const removedItem = mediaPreviews.find(
-      (item) => item.id === mediaIdToRemove,
-    );
+    const removedItem = mediaPreviews.find((item) => item.id === mediaIdToRemove);
     revokePreview(removedItem?.preview);
 
-    setMediaPreviews((prev) =>
-      prev.filter((item) => item.id !== mediaIdToRemove),
+    const nextMediaPreviews = mediaPreviews.filter(
+      (item) => item.id !== mediaIdToRemove,
     );
+
+    setMediaPreviews(nextMediaPreviews);
     formik.setFieldValue(
       "media",
-      mediaPreviews
-        .filter((item) => item.id !== mediaIdToRemove)
-        .map((item) => item.file),
+      nextMediaPreviews
+        .map((item) => item.file || item.original || null)
+        .filter(Boolean),
     );
   };
 
@@ -252,11 +261,24 @@ export const useProjectForm = () => {
               item.name ||
               getFileNameFromUrl(item.url || item, `Media ${index + 1}`),
             file: null,
+            original: item,
           })),
         );
       }
     } catch (error) {
       console.error("Error fetching project detail:", error);
+    }
+  };
+
+  const handleDeleteProject = async (id) => {
+    try {
+      const projectData = await deleteProjectService(id);
+
+      if (projectData?.success) {
+        fetchAllProjects();
+      }
+    } catch (error) {
+      console.error("Error deleting project:", error);
     }
   };
 
@@ -276,7 +298,8 @@ export const useProjectForm = () => {
     handleGetProjectDetail,
     projectDetailLoading,
     projectDetail,
-    statusOptions,
     featuredOptions,
+    handleDeleteProject,
+    isEditMode,
   };
 };

@@ -36,7 +36,6 @@ export const ProjectFormPage = () => {
     handleMediaChange,
     removeMediaItem,
     handleGetProjectDetail,
-    statusOptions,
     featuredOptions,
   } = useProjectForm();
   const navigate = useNavigate();
@@ -498,7 +497,9 @@ export const ProjectFormPage = () => {
             >
               Cancel
             </Button>
-            <Button type="submit">Submit</Button>
+            <Button type="submit">
+              {isEditMode ? "Update Project" : "Create Project"}
+            </Button>
           </Field>
         </FieldSet>
       </form>
