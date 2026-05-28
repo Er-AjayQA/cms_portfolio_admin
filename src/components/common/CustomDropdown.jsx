@@ -190,8 +190,8 @@ export const CustomDropdown = ({
 
       <div
         className={cn(
-          "flex items-center !m-0 overflow-hidden rounded-lg border border-border/60 bg-white shadow-[0_1px_2px_rgba(15,23,42,0.06)] transition-all focus-within:border-primary/40 focus-within:ring-2 focus-within:ring-primary/10",
-          open && "border-primary/40 ring-2 ring-primary/10",
+          "app-form-control flex items-center !m-0 overflow-hidden rounded-[var(--radius-md)] transition-all",
+          open && "border-primary/40 ring-4 ring-primary/10",
           showError && "border-red-500/60 ring-2 ring-red-500/10",
           isLocked && "cursor-default opacity-90",
         )}
@@ -212,7 +212,7 @@ export const CustomDropdown = ({
             onBlur={onBlur}
             disabled={isLocked}
             className={cn(
-              "flex h-11 w-full items-center justify-between border-none bg-transparent px-4 py-3 text-sm shadow-none outline-none hover:bg-transparent focus-visible:outline-none",
+              "flex h-12 w-full items-center justify-between border-none bg-transparent px-4 py-3 text-sm shadow-none outline-none hover:bg-transparent focus-visible:outline-none",
               isLocked && "pointer-events-none cursor-default opacity-70",
             )}
           >
@@ -247,9 +247,9 @@ export const CustomDropdown = ({
             </div>
           </PopoverTrigger>
 
-          <PopoverContent className="w-[var(--radix-popover-trigger-width)] overflow-hidden rounded-lg border border-border/60 bg-white p-0 shadow-[0_24px_70px_rgba(15,23,42,0.16)]">
-            <div className="p-2 bg-white border-b border-border/60">
-              <div className="flex items-center gap-2 rounded-[14px] border border-border/60 bg-white px-3 shadow-[0_1px_2px_rgba(15,23,42,0.05)]">
+          <PopoverContent className="w-[var(--radix-popover-trigger-width)] overflow-hidden rounded-[var(--radius-md)] border border-border bg-[var(--surface-panel-strong)] p-0 shadow-[var(--shadow-popover)]">
+            <div className="border-b border-border/60 bg-muted/40 p-2.5">
+              <div className="app-form-control flex items-center gap-2 rounded-[var(--radius-sm)] px-3">
                 <Search className="size-4 shrink-0 text-muted-foreground" />
                 <input
                   ref={searchInputRef}
@@ -262,21 +262,21 @@ export const CustomDropdown = ({
                   onClick={(event) => event.stopPropagation()}
                   placeholder={searchPlaceholder}
                   readOnly={isLocked}
-                  className="w-full text-sm bg-transparent outline-none h-9 placeholder:text-muted-foreground/60"
+                  className="h-10 w-full bg-transparent text-sm outline-none placeholder:text-muted-foreground/60"
                 />
               </div>
             </div>
 
-            <div className="p-1 overflow-y-auto bg-white max-h-72">
+            <div className="max-h-72 overflow-y-auto bg-[var(--surface-panel-strong)] p-1.5">
               {isAddNew &&
                 config.create &&
                 searchValue &&
                 filteredItems.length === 0 && (
-                  <div className="p-2 border-b border-border/60">
+                  <div className="border-b border-border/60 p-2">
                     <Button
                       type="button"
                       variant="secondary"
-                      className="w-full justify-start gap-2 rounded-[14px] text-primary hover:bg-primary/10"
+                      className="w-full justify-start gap-2 text-primary"
                       onClick={handleCreate}
                       disabled={isCreating}
                     >
@@ -307,7 +307,7 @@ export const CustomDropdown = ({
                     <div
                       key={itemValue}
                       onClick={() => handleSelect(itemValue)}
-                      className="relative flex items-center w-full py-2 text-sm transition-colors rounded-md outline-none cursor-pointer select-none group px-9 hover:bg-black/10 hover:text-foreground focus:bg-accent focus:text-accent-foreground"
+                      className="group relative flex w-full cursor-pointer select-none items-center rounded-[var(--radius-sm)] px-9 py-2.5 text-sm outline-none transition-colors hover:bg-muted hover:text-foreground focus:bg-muted focus:text-foreground"
                     >
                       <div className="flex items-center flex-1 min-w-0 gap-2">
                         <span className="absolute left-3 flex h-3.5 w-3.5 items-center justify-center">
@@ -327,7 +327,7 @@ export const CustomDropdown = ({
         </Popover>
       </div>
 
-      {showError && <p className="text-xs text-red-600">{error}</p>}
+      {showError && <p className="text-sm font-medium text-red-600">{error}</p>}
       {!showError && helpText && (
         <p className="text-xs text-muted-foreground">{helpText}</p>
       )}

@@ -353,7 +353,7 @@ export const ProjectFormPage = () => {
             {/* Row 9 */}
             <FieldGroup className="grid gap-5 md:grid-cols-2">
               <Field>
-                <FieldLabel htmlFor="thumbnail">Upload Thumbnail</FieldLabel>
+                <FieldLabel>Upload Thumbnail</FieldLabel>
                 <div className="overflow-hidden rounded-[1.5rem] border border-border/60 bg-[linear-gradient(180deg,#ffffff_0%,#f8fafc_100%)] shadow-[0_16px_40px_-34px_rgba(15,23,42,0.8)]">
                   <Label
                     htmlFor="thumbnail"
@@ -417,7 +417,7 @@ export const ProjectFormPage = () => {
               </Field>
 
               <Field>
-                <FieldLabel htmlFor="media">Gallery</FieldLabel>
+                <FieldLabel>Gallery</FieldLabel>
                 <div className="overflow-hidden rounded-[1.5rem] border border-border/60 bg-[linear-gradient(180deg,#ffffff_0%,#f8fafc_100%)] shadow-[0_16px_40px_-34px_rgba(15,23,42,0.8)]">
                   <Label
                     htmlFor="media"
