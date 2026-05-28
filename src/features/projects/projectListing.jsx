@@ -9,8 +9,15 @@ import { Checkbox } from "@/components/ui/checkbox";
 
 export const ProjectListingPage = () => {
   const navigate = useNavigate();
-  const { projectsLoading, allProjects, handleDeleteProject } =
-    useProjectForm();
+  const {
+    projectsLoading,
+    allProjects,
+    handleDeleteProject,
+    isEditMode,
+    setIsEditMode,
+    isViewMode,
+    setIsViewMode,
+  } = useProjectForm();
   const columns = [
     {
       id: "select",

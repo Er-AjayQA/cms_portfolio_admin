@@ -37,10 +37,14 @@ export const ProjectFormPage = () => {
     removeMediaItem,
     handleGetProjectDetail,
     featuredOptions,
+    isEditMode,
+    isViewMode,
+    pageTitle,
+    resetForm,
   } = useProjectForm();
   const navigate = useNavigate();
   const param = useParams();
-  const isEditMode = Boolean(param?.slug);
+
   const thumbnailName =
     formik.values.thumbnail?.name ||
     (typeof formik.values.thumbnail === "string"
@@ -57,9 +61,7 @@ export const ProjectFormPage = () => {
     <div>
       <form onSubmit={formik.handleSubmit}>
         <FieldSet>
-          <FieldLegend>
-            {isEditMode ? "Edit Project" : "Add Project"}
-          </FieldLegend>
+          <FieldLegend>{pageTitle()}</FieldLegend>
           <FieldDescription>
             This project will appear in your projects section.
           </FieldDescription>
@@ -493,7 +495,10 @@ export const ProjectFormPage = () => {
             <Button
               variant="default"
               type="button"
-              onClick={() => navigate("/projects")}
+              onClick={() => {
+                resetForm();
+                navigate("/projects");
+              }}
             >
               Cancel
             </Button>

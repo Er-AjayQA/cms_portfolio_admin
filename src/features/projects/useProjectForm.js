@@ -9,12 +9,12 @@ import {
 } from "@/services/projects.services";
 import { API_BASE_URL } from "@/services/api";
 import { useEffect, useRef, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 
 export const useProjectForm = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const params = useParams();
-  const isEditMode = Boolean(params?.slug);
 
   const [projectsLoading, setProjectsLoading] = useState(false);
   const [allProjects, setAllProjects] = useState([]);
@@ -24,6 +24,9 @@ export const useProjectForm = () => {
   const [mediaPreviews, setMediaPreviews] = useState([]);
   const thumbnailPreviewRef = useRef("");
   const mediaPreviewsRef = useRef([]);
+
+  const isEditMode = location.pathname.startsWith("/projects/edit/");
+  const isViewMode = location.pathname.startsWith("/projects/view/");
 
   const featuredOptions = [
     { label: "Featured", value: "true" },
@@ -103,18 +106,25 @@ export const useProjectForm = () => {
     }
   };
 
+  const resetForm = () => {
+    formik.resetForm();
+    setThumbnailPreview("");
+    setMediaPreviews([]);
+  };
+
   const formik = useFormik({
     initialValues: initialValues,
     validationSchema: projectSchema,
     onSubmit: async (values, helpers) => {
       try {
-        if (isEditMode && params?.slug) {
+        if (isEditMode) {
           await updateProjectService(params.slug, values);
         } else {
           await createProjectService(values);
         }
 
         navigate("/projects", { replace: true });
+        resetForm();
       } catch (error) {
         console.error("Error saving project:", error);
         helpers.setSubmitting(false);
@@ -208,7 +218,9 @@ export const useProjectForm = () => {
   };
 
   const removeMediaItem = (mediaIdToRemove) => {
-    const removedItem = mediaPreviews.find((item) => item.id === mediaIdToRemove);
+    const removedItem = mediaPreviews.find(
+      (item) => item.id === mediaIdToRemove,
+    );
     revokePreview(removedItem?.preview);
 
     const nextMediaPreviews = mediaPreviews.filter(
@@ -282,6 +294,17 @@ export const useProjectForm = () => {
     }
   };
 
+  const pageTitle = () => {
+    switch (true) {
+      case isViewMode:
+        return "View Project";
+      case isEditMode:
+        return "Edit Project";
+      default:
+        return "Create Project";
+    }
+  };
+
   return {
     formik,
     categoryOptions,
@@ -301,5 +324,8 @@ export const useProjectForm = () => {
     featuredOptions,
     handleDeleteProject,
     isEditMode,
+    isViewMode,
+    pageTitle,
+    resetForm,
   };
 };
