@@ -36,6 +36,7 @@ export const HeroShell = ({
 
         <CardContent className="p-0">
           <Button
+            variant="outline"
             className="h-11 flex items-center justify-center gap-2 border-none bg-[color:var(--brand-warm)] px-5 text-slate-900 hover:bg-[color:var(--brand-warm)]/90"
             onClick={() => router(buttonRoute)}
           >
