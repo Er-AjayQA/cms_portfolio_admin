@@ -78,15 +78,6 @@ export const ProjectFormPage = () => {
             buttonRoute="/projects"
           />
 
-          {/* <div className="rounded-[1.75rem] border border-white/60 bg-[linear-gradient(135deg,rgba(15,23,42,0.95)_0%,rgba(51,65,85,0.94)_65%,rgba(120,53,15,0.8)_100%)] p-6 text-white shadow-[0_28px_70px_-38px_rgba(15,23,42,0.9)]">
-            <FieldLegend className="text-2xl font-semibold tracking-tight text-white">
-              {pageTitle()}
-            </FieldLegend>
-            <FieldDescription className="max-w-2xl text-slate-200">
-              This project will appear in your projects section.
-            </FieldDescription>
-          </div> */}
-
           {/* Row 1 */}
           <div className="space-y-6 rounded-[1.75rem] border border-white/60 bg-white/75 p-5 shadow-[0_20px_50px_-34px_rgba(15,23,42,0.75)] backdrop-blur md:p-6">
             <FieldGroup className="grid gap-5 md:grid-cols-2">

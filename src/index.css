@@ -211,6 +211,54 @@
     box-shadow: var(--shadow-soft);
   }
 
+  .app-table-shell {
+    background: linear-gradient(
+      180deg,
+      rgba(250, 250, 249, 0.7) 0%,
+      rgba(248, 250, 252, 0.5) 100%
+    );
+    border-radius: calc(var(--radius-lg) - 0.15rem);
+  }
+
+  .app-table-head-row {
+    background: transparent;
+  }
+
+  .app-table-head-cell {
+    color: oklch(0.5 0.025 245);
+    letter-spacing: 0.16em;
+  }
+
+  .app-table-body-row {
+    background: transparent;
+  }
+
+  .app-table-body-row:hover {
+    background: transparent;
+  }
+
+  .app-table-row-cell {
+    background: rgba(255, 255, 255, 0.94);
+    border-top: 1px solid color-mix(in srgb, var(--border) 58%, white 42%);
+    border-bottom: 1px solid color-mix(in srgb, var(--border) 58%, white 42%);
+  }
+
+  .app-table-row-cell:first-child {
+    border-left: 1px solid color-mix(in srgb, var(--border) 58%, white 42%);
+    border-top-left-radius: var(--radius-md);
+    border-bottom-left-radius: var(--radius-md);
+  }
+
+  .app-table-row-cell:last-child {
+    border-right: 1px solid color-mix(in srgb, var(--border) 58%, white 42%);
+    border-top-right-radius: var(--radius-md);
+    border-bottom-right-radius: var(--radius-md);
+  }
+
+  .app-table-body-row:hover .app-table-row-cell {
+    background: rgba(248, 250, 252, 0.98);
+  }
+
   .badge-status-draft {
     border: 1px solid color-mix(in srgb, var(--brand-warm) 45%, white 55%);
     background: color-mix(in srgb, var(--brand-warm-soft) 76%, white 24%);
@@ -218,7 +266,8 @@
   }
 
   .badge-status-published {
-    border: 1px solid color-mix(in srgb, var(--brand-success-soft) 55%, #86efac 45%);
+    border: 1px solid
+      color-mix(in srgb, var(--brand-success-soft) 55%, #86efac 45%);
     background: color-mix(in srgb, var(--brand-success-soft) 84%, white 16%);
     color: var(--brand-success-strong);
   }
