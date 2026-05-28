@@ -92,7 +92,7 @@ export const ProjectFormPage = () => {
                   onChange={formik.handleChange}
                   autoComplete="off"
                   placeholder="eg: CRM Dashboard"
-                  showError={formik.errors.title}
+                  showError={formik.touched.title && formik.errors.title}
                 />
                 {formik.errors.title && formik.touched.title && (
                   <FieldError className="text-[12px] font-medium text-red-600">
@@ -110,7 +110,7 @@ export const ProjectFormPage = () => {
                   onChange={formik.handleChange}
                   autoComplete="off"
                   placeholder="eg: CRM Dashboard"
-                  showError={formik.errors.slug}
+                  showError={formik.touched.slug && formik.errors.slug}
                 />
                 {formik.errors.slug && formik.touched.slug && (
                   <FieldError className="text-[12px] font-medium text-red-600">
@@ -131,7 +131,7 @@ export const ProjectFormPage = () => {
                   onChange={formik.handleChange}
                   autoComplete="off"
                   placeholder="eg: Lead Developer"
-                  showError={formik.errors.role}
+                  showError={formik.touched.role && formik.errors.role}
                 />
                 {formik.errors.role && formik.touched.role && (
                   <FieldError className="text-[12px] font-medium text-red-600">
@@ -301,7 +301,10 @@ export const ProjectFormPage = () => {
                   name="shortDescription"
                   value={formik.values.shortDescription}
                   onChange={formik.handleChange}
-                  showError={formik.errors.shortDescription}
+                  showError={
+                    formik.touched.shortDescription &&
+                    formik.errors.shortDescription
+                  }
                 />
                 {formik.errors.shortDescription &&
                   formik.touched.shortDescription && (
@@ -321,7 +324,9 @@ export const ProjectFormPage = () => {
                   onChange={(nextValue) =>
                     formik.setFieldValue("description", nextValue)
                   }
-                  showError={formik.errors.description}
+                  showError={
+                    formik.touched.description && formik.errors.description
+                  }
                 />
                 {formik.errors.description && formik.touched.description && (
                   <FieldError className="text-[12px] font-medium text-red-600">
@@ -362,11 +367,11 @@ export const ProjectFormPage = () => {
               <Field>
                 <FieldLabel>Upload Thumbnail</FieldLabel>
                 <div
-                  className={`overflow-hidden rounded-[1.5rem] border border-border/60 shadow-[0_16px_40px_-34px_rgba(15,23,42,0.8)] ${formik.errors.thumbnail ? "border-red-500/60 ring-2 ring-red-500/10 bg-red-400/20" : "bg-[linear-gradient(180deg,#ffffff_0%,#f8fafc_100%)]"}`}
+                  className={`overflow-hidden rounded-[1.5rem] border border-border/60 shadow-[0_16px_40px_-34px_rgba(15,23,42,0.8)] ${formik.touched.thumbnail && formik.errors.thumbnail ? "border-red-500/60 ring-2 ring-red-500/10 bg-red-400/20" : "bg-[linear-gradient(180deg,#ffffff_0%,#f8fafc_100%)]"}`}
                 >
                   <Label
                     htmlFor="thumbnail"
-                    className={`flex min-h-[230px] cursor-pointer flex-col items-center justify-center gap-3 border-b border-dashed  ${formik.errors.thumbnail ? "border-red-500/60 ring-2 ring-red-500/10" : "border-border/70"} bg-[radial-gradient(circle_at_top,_rgba(15,23,42,0.08),_transparent_45%),radial-gradient(circle_at_bottom_right,_rgba(217,119,6,0.12),_transparent_25%),linear-gradient(180deg,_#ffffff_0%,_#f8fafc_100%)] p-6 text-center transition-colors hover:bg-slate-50`}
+                    className={`flex min-h-[230px] cursor-pointer flex-col items-center justify-center gap-3 border-b border-dashed  ${formik.touched.thumbnail && formik.errors.thumbnail ? "border-red-500/60 ring-2 ring-red-500/10" : "border-border/70"} bg-[radial-gradient(circle_at_top,_rgba(15,23,42,0.08),_transparent_45%),radial-gradient(circle_at_bottom_right,_rgba(217,119,6,0.12),_transparent_25%),linear-gradient(180deg,_#ffffff_0%,_#f8fafc_100%)] p-6 text-center transition-colors hover:bg-slate-50`}
                   >
                     {thumbnailPreview ? (
                       <img
