@@ -78,8 +78,9 @@ export const ProjectFormPage = () => {
             buttonRoute="/projects"
           />
 
-          {/* Row 1 */}
+          {/* Table */}
           <div className="space-y-6 rounded-[1.75rem] border border-white/60 bg-white/75 p-5 shadow-[0_20px_50px_-34px_rgba(15,23,42,0.75)] backdrop-blur md:p-6">
+            {/* Row 1 */}
             <FieldGroup className="grid gap-5 md:grid-cols-2">
               <Field>
                 <FieldLabel htmlFor="title">Project Title</FieldLabel>
@@ -508,7 +509,7 @@ export const ProjectFormPage = () => {
             {/* Action Buttons */}
             <Field orientation="horizontal" className="justify-end mt-6">
               <Button
-                variant="outline"
+                variant="destructive"
                 type="button"
                 className="px-5 bg-white h-11 rounded-2xl border-slate-200"
                 onClick={() => {
@@ -518,7 +519,11 @@ export const ProjectFormPage = () => {
               >
                 Cancel
               </Button>
-              <Button type="submit" className="px-5 h-11 rounded-2xl">
+              <Button
+                type="submit"
+                variant="secondary"
+                className="px-5 h-11 rounded-2xl"
+              >
                 {isEditMode ? "Update Project" : "Create Project"}
               </Button>
             </Field>

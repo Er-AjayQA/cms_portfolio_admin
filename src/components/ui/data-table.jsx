@@ -99,7 +99,10 @@ export function DataTable({ columns, data }) {
                 Columns
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
+            <DropdownMenuContent
+              align="end"
+              className="shadow-md dropdown-content-bg"
+            >
               {table
                 .getAllColumns()
                 .filter((column) => column.getCanHide())
@@ -107,7 +110,7 @@ export function DataTable({ columns, data }) {
                   return (
                     <DropdownMenuCheckboxItem
                       key={column.id}
-                      className="capitalize"
+                      className="px-5 py-2 capitalize"
                       checked={column.getIsVisible()}
                       onCheckedChange={(value) =>
                         column.toggleVisibility(!!value)

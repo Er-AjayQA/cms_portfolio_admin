@@ -1,14 +1,12 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap");
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
-  .theme {
-    --font-heading: "Geist Variable", sans-serif;
-    --font-sans: "Inter Variable", sans-serif;
-  }
-
   :root {
+    --font-heading: "Poppins", sans-serif;
+    --font-sans: "Poppins", sans-serif;
     --background: oklch(0.96 0.008 85);
     --foreground: oklch(0.24 0.03 245);
 
@@ -218,6 +216,14 @@
       rgba(248, 250, 252, 0.5) 100%
     );
     border-radius: calc(var(--radius-lg) - 0.15rem);
+  }
+
+  .dropdown-content-bg {
+    background: linear-gradient(
+      180deg,
+      rgba(248, 250, 252, 1) 0%,
+      rgba(255, 255, 255, 1) 100%
+    );
   }
 
   .app-table-head-row {
