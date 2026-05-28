@@ -23,7 +23,6 @@ import {
 } from "@/components/ui/select";
 import { RichTextEditor } from "@/components/common/RichTextEditor";
 import { Label } from "@/components/ui/label";
-import { Switch } from "@/components/ui/switch";
 import { useEffect } from "react";
 
 export const ProjectFormPage = () => {
@@ -37,6 +36,8 @@ export const ProjectFormPage = () => {
     handleMediaChange,
     removeMediaItem,
     handleGetProjectDetail,
+    statusOptions,
+    featuredOptions,
   } = useProjectForm();
   const navigate = useNavigate();
   const param = useParams();
@@ -236,10 +237,12 @@ export const ProjectFormPage = () => {
             />
           </FieldGroup>
 
+          {/* Row 6 */}
           <FieldGroup className="grid grid-cols-2 gap-5">
             <Field>
               <FieldLabel htmlFor="status">Status</FieldLabel>
               <Select
+                name="status"
                 value={formik.values.status}
                 onValueChange={(nextValue) =>
                   formik.setFieldValue("status", nextValue)
@@ -255,24 +258,30 @@ export const ProjectFormPage = () => {
               </Select>
             </Field>
 
-            <Field className="justify-end">
+            <Field>
               <FieldLabel htmlFor="featured">Featured</FieldLabel>
-              <div className="flex h-11 items-center gap-3 rounded-lg border border-border/60 bg-white px-4 shadow-sm">
-                <Switch
-                  id="featured"
-                  checked={formik.values.featured}
-                  onCheckedChange={(checked) =>
-                    formik.setFieldValue("featured", checked)
-                  }
-                />
-                <span className="text-sm text-slate-600">
-                  {formik.values.featured ? "Featured" : "Not featured"}
-                </span>
-              </div>
+              <Select
+                name="featured"
+                value={formik.values.featured}
+                onValueChange={(nextValue) =>
+                  formik.setFieldValue("featured", nextValue)
+                }
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Select featured" />
+                </SelectTrigger>
+                <SelectContent>
+                  {featuredOptions.map((option) => (
+                    <SelectItem key={option.value} value={option.value}>
+                      {option.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </Field>
           </FieldGroup>
 
-          {/* Row 6 */}
+          {/* Row 7 */}
           <FieldGroup className="grid grid-cols-1 gap-2">
             <Field>
               <FieldLabel htmlFor="shortDescription">
@@ -303,7 +312,7 @@ export const ProjectFormPage = () => {
             </Field>
           </FieldGroup>
 
-          {/* Row 7 */}
+          {/* Row 8 */}
           <FieldGroup className="grid grid-cols-1 gap-2">
             <Field>
               <FieldLabel htmlFor="challenges">Challenges</FieldLabel>
@@ -326,7 +335,7 @@ export const ProjectFormPage = () => {
             </Field>
           </FieldGroup>
 
-          {/* Row 8 */}
+          {/* Row 9 */}
           <FieldGroup className="grid grid-cols-2 gap-5">
             <Field>
               <FieldLabel htmlFor="thumbnail">Upload Thumbnail</FieldLabel>
@@ -422,7 +431,7 @@ export const ProjectFormPage = () => {
 
                 <div className="px-4 py-3">
                   {mediaPreviews.length > 0 ? (
-                    <div className="grid grid-cols-2 gap-3">
+                    <div className="grid grid-cols-4 gap-3">
                       {mediaPreviews.map((item) => (
                         <div
                           key={item.id}
@@ -438,7 +447,7 @@ export const ProjectFormPage = () => {
                               <img
                                 src={item.preview}
                                 alt={item.name}
-                                className="object-cover w-full h-full"
+                                className="object-contain w-full h-full"
                               />
                             )}
                             <div className="absolute top-2 left-2 inline-flex items-center gap-1 rounded-full bg-black/70 px-2 py-1 text-[11px] font-medium text-white">
@@ -480,6 +489,7 @@ export const ProjectFormPage = () => {
             </Field>
           </FieldGroup>
 
+          {/* Action Buttons */}
           <Field orientation="horizontal" className="justify-end mt-5">
             <Button
               variant="default"

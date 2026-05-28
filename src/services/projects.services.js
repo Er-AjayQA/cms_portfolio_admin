@@ -3,6 +3,8 @@ import api from "./api";
 export const createProjectService = async (data) => {
   try {
     const formData = new FormData();
+    const normalizedFeatured =
+      data.featured === true || data.featured === "true";
 
     formData.append("title", data.title || "");
     formData.append("slug", data.slug || "");
@@ -11,7 +13,7 @@ export const createProjectService = async (data) => {
     formData.append("category", data.category || "");
     formData.append("githubUrl", data.githubUrl || "");
     formData.append("liveUrl", data.liveUrl || "");
-    formData.append("featured", String(Boolean(data.featured)));
+    formData.append("featured", String(normalizedFeatured));
     formData.append("status", data.status || "draft");
     formData.append("startDate", data.startDate || "");
     formData.append("endDate", data.endDate || "");

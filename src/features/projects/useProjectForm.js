@@ -11,6 +11,21 @@ import { useNavigate } from "react-router-dom";
 
 export const useProjectForm = () => {
   const navigate = useNavigate();
+
+  const [projectsLoading, setProjectsLoading] = useState(false);
+  const [allProjects, setAllProjects] = useState([]);
+  const [projectDetailLoading, setProjectDetailLoading] = useState(false);
+  const [projectDetail, setProjectDetail] = useState(null);
+  const [thumbnailPreview, setThumbnailPreview] = useState("");
+  const [mediaPreviews, setMediaPreviews] = useState([]);
+  const thumbnailPreviewRef = useRef("");
+  const mediaPreviewsRef = useRef([]);
+
+  const statusOptions = ["draft", "published"];
+  const featuredOptions = [
+    { label: "Featured", value: "true" },
+    { label: "Not Featured", value: "false" },
+  ];
   const categoryOptions = [
     "Web Development",
     "Mobile Development",
@@ -43,7 +58,7 @@ export const useProjectForm = () => {
     techStackId: [],
     githubUrl: "",
     liveUrl: "",
-    featured: false,
+    featured: "false",
     status: "draft",
     startDate: "",
     endDate: "",
@@ -51,17 +66,7 @@ export const useProjectForm = () => {
     role: "",
     challenges: "",
     solution: "",
-    order: 0,
   };
-
-  const [projectsLoading, setProjectsLoading] = useState(false);
-  const [allProjects, setAllProjects] = useState([]);
-  const [projectDetailLoading, setProjectDetailLoading] = useState(false);
-  const [projectDetail, setProjectDetail] = useState(null);
-  const [thumbnailPreview, setThumbnailPreview] = useState("");
-  const [mediaPreviews, setMediaPreviews] = useState([]);
-  const thumbnailPreviewRef = useRef("");
-  const mediaPreviewsRef = useRef([]);
 
   const fetchAllProjects = async () => {
     try {
@@ -226,7 +231,7 @@ export const useProjectForm = () => {
           techStackId: normalizeTechStackIds(projectData.techStackId),
           githubUrl: projectData.githubUrl || "",
           liveUrl: projectData.liveUrl || "",
-          featured: Boolean(projectData.featured),
+          featured: String(Boolean(projectData.featured)),
           status: projectData.status || "draft",
           startDate: formatDateForInput(projectData.startDate),
           endDate: formatDateForInput(projectData.endDate),
@@ -234,7 +239,6 @@ export const useProjectForm = () => {
           role: projectData.role || "",
           challenges: projectData.challenges || "",
           solution: projectData.solution || "",
-          order: projectData.order ?? 0,
         });
 
         setThumbnailPreview(getAssetUrl(projectData.thumbnail));
@@ -272,5 +276,7 @@ export const useProjectForm = () => {
     handleGetProjectDetail,
     projectDetailLoading,
     projectDetail,
+    statusOptions,
+    featuredOptions,
   };
 };

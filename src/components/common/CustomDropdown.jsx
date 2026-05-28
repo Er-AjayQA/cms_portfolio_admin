@@ -132,11 +132,19 @@ export const CustomDropdown = ({
     try {
       const payload = { [config.createKey || config.labelKey]: searchValue };
       const res = await config.create(payload);
-      const newItem = res?.data?.data;
+      const newItem = res?.data || res?.techStack;
 
       if (!newItem) return;
 
-      setItems((prev) => [...prev, newItem]);
+      setItems((prev) => {
+        const alreadyExists = prev.some(
+          (item) =>
+            String(item?.[config.valueKey]) ===
+            String(newItem?.[config.valueKey]),
+        );
+
+        return alreadyExists ? prev : [...prev, newItem];
+      });
       handleSelect(newItem[config.valueKey]);
       setSearchValue("");
     } catch (createError) {
