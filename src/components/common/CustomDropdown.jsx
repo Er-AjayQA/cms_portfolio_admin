@@ -192,7 +192,7 @@ export const CustomDropdown = ({
         className={cn(
           "app-form-control flex items-center !m-0 overflow-hidden rounded-[var(--radius-md)] transition-all",
           open && "border-primary/40 ring-4 ring-primary/10",
-          showError && "border-red-500/60 ring-2 ring-red-500/10",
+          showError && "border-red-500/60 ring-2 ring-red-500/10 bg-red-400",
           isLocked && "cursor-default opacity-90",
         )}
       >
@@ -262,7 +262,7 @@ export const CustomDropdown = ({
                   onClick={(event) => event.stopPropagation()}
                   placeholder={searchPlaceholder}
                   readOnly={isLocked}
-                  className="h-10 w-full bg-transparent text-sm outline-none placeholder:text-muted-foreground/60"
+                  className="w-full h-10 text-sm bg-transparent outline-none placeholder:text-muted-foreground/60"
                 />
               </div>
             </div>
@@ -272,11 +272,11 @@ export const CustomDropdown = ({
                 config.create &&
                 searchValue &&
                 filteredItems.length === 0 && (
-                  <div className="border-b border-border/60 p-2">
+                  <div className="p-2 border-b border-border/60">
                     <Button
                       type="button"
                       variant="secondary"
-                      className="w-full justify-start gap-2 text-primary"
+                      className="justify-start w-full gap-2 text-primary"
                       onClick={handleCreate}
                       disabled={isCreating}
                     >
@@ -327,7 +327,9 @@ export const CustomDropdown = ({
         </Popover>
       </div>
 
-      {showError && <p className="text-sm font-medium text-red-600">{error}</p>}
+      {showError && (
+        <p className="text-[12px] font-medium text-red-600">{error}</p>
+      )}
       {!showError && helpText && (
         <p className="text-xs text-muted-foreground">{helpText}</p>
       )}

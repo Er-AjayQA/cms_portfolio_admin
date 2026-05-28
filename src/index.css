@@ -247,6 +247,11 @@
     background: rgba(248, 250, 252, 0.7);
   }
 
+  .app-toolbar-control {
+    min-width: 220px;
+    flex: 1 1 220px;
+  }
+
   .app-editor-toolbar-secondary {
     border-top: 1px solid rgba(255, 255, 255, 0.75);
   }

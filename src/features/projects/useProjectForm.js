@@ -43,6 +43,7 @@ export const useProjectForm = () => {
 
   const projectSchema = yup.object({
     title: yup.string().required("Title is required"),
+    role: yup.string().required("Role is required"),
     slug: yup.string().required("Slug is required"),
     shortDescription: yup.string().required("Short description is required"),
     description: yup.string().required("Description is required"),
@@ -304,6 +305,12 @@ export const useProjectForm = () => {
         return "Create Project";
     }
   };
+
+  useEffect(() => {
+    formik.setFieldValue("slug", () => {
+      return formik.values.title?.split(" ")?.join("-");
+    });
+  }, [formik.values.title]);
 
   return {
     formik,

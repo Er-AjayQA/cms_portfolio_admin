@@ -55,7 +55,7 @@ import {
   SelectValue,
 } from "../ui/select";
 
-export const RichTextEditor = ({ value, onChange }) => {
+export const RichTextEditor = ({ value, onChange, showError }) => {
   const fontFamilyOptions = [
     "Poppins",
     "Arial",
@@ -389,52 +389,61 @@ export const RichTextEditor = ({ value, onChange }) => {
   ];
 
   return (
-    <div className="app-editor-shell">
-      <div className="flex flex-row items-center gap-2 px-3 py-3 app-editor-toolbar">
-        <Select
-          defaultValue=""
-          onChange={(event) => applyFontFamily(event.target.value)}
-        >
-          <SelectTrigger>
+    <div
+      className={`app-editor-shell ${showError ? "border-red-500/60 ring-2 ring-red-500/10 bg-red-400" : ""}`}
+    >
+      <div
+        className={`flex flex-wrap items-center gap-2 px-3 py-3 app-editor-toolbar ${showError ? "bg-red-400/20" : ""}`}
+      >
+        <Select defaultValue="" onValueChange={applyFontFamily}>
+          <SelectTrigger className="app-toolbar-control">
             <SelectValue placeholder="Select font family" />
           </SelectTrigger>
           <SelectContent>
             {fontFamilyOptions?.map((option) => {
-              return <SelectItem value={option}>{option}</SelectItem>;
+              return (
+                <SelectItem key={option} value={option}>
+                  {option}
+                </SelectItem>
+              );
             })}
           </SelectContent>
         </Select>
 
-        <Select
-          defaultValue=""
-          onChange={(event) => applyFontSize(event.target.value)}
-        >
-          <SelectTrigger>
+        <Select defaultValue="" onValueChange={applyFontSize}>
+          <SelectTrigger className="app-toolbar-control">
             <SelectValue placeholder="Select font size" />
           </SelectTrigger>
           <SelectContent>
             {fontSizeOptions?.map((option) => {
-              return <SelectItem value={option}>{option}</SelectItem>;
+              return (
+                <SelectItem key={option} value={option}>
+                  {option}
+                </SelectItem>
+              );
             })}
           </SelectContent>
         </Select>
 
-        <Select
-          defaultValue=""
-          onChange={(event) => applyLineHeight(event.target.value)}
-        >
-          <SelectTrigger>
+        <Select defaultValue="" onValueChange={applyLineHeight}>
+          <SelectTrigger className="app-toolbar-control">
             <SelectValue placeholder="Select line height" />
           </SelectTrigger>
           <SelectContent>
             {lineHeightOptions?.map((option) => {
-              return <SelectItem value={option}>{option}</SelectItem>;
+              return (
+                <SelectItem key={option} value={option}>
+                  {option}
+                </SelectItem>
+              );
             })}
           </SelectContent>
         </Select>
       </div>
 
-      <div className="flex flex-wrap gap-2 px-3 py-3 app-editor-toolbar app-editor-toolbar-secondary">
+      <div
+        className={`flex flex-wrap gap-2 px-3 py-3 app-editor-toolbar app-editor-toolbar-secondary ${showError ? "bg-red-400/20" : ""}`}
+      >
         {toolbarItems.map((item) => {
           const Icon = item.icon;
 
@@ -463,7 +472,9 @@ export const RichTextEditor = ({ value, onChange }) => {
 
       <EditorContent editor={editor} className="p-2" />
 
-      <div className="flex items-center justify-between px-4 py-3 text-xs app-editor-status text-muted-foreground">
+      <div
+        className={`flex items-center justify-between px-4 py-3 text-xs app-editor-status text-muted-foreground ${showError ? "bg-red-400/20" : ""}`}
+      >
         <span>{editor.storage.characterCount.words()} words</span>
         <span>
           {editor.storage.characterCount.characters()}/5000 characters
