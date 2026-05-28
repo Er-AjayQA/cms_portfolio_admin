@@ -7,17 +7,25 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { useNavigate } from "react-router-dom";
+import { Badge } from "../ui/badge";
 
-export const HeroShell = ({ title, description, buttonLabel, buttonRoute }) => {
+export const HeroShell = ({
+  badgeText,
+  title,
+  description,
+  buttonLabel,
+  buttonIcon,
+  buttonRoute,
+}) => {
   const router = useNavigate();
 
   return (
-    <Card className="border-slate-200 bg-[linear-gradient(135deg,#182235_0%,#2b3b55_100%)] text-white shadow-[0_20px_60px_-42px_rgba(15,23,42,0.75)]">
+    <Card className="app-hero">
       <div className="flex flex-col gap-5 p-6 md:flex-row md:items-center md:justify-between">
-        <CardHeader className="space-y-2 p-0">
-          <p className="text-xs font-semibold uppercase tracking-[0.28em] text-amber-200/90">
-            Project Management
-          </p>
+        <CardHeader className="p-0 space-y-2">
+          <Badge className="px-10! text-[10px] font-medium uppercase tracking-[0.28em] text-amber-200/90">
+            {badgeText}
+          </Badge>
           <CardTitle className="text-3xl font-semibold tracking-tight text-white">
             {title}
           </CardTitle>
@@ -28,10 +36,10 @@ export const HeroShell = ({ title, description, buttonLabel, buttonRoute }) => {
 
         <CardContent className="p-0">
           <Button
-            className="h-11 rounded-xl bg-amber-300 px-5 text-slate-900 hover:bg-amber-200"
+            className="h-11 flex items-center justify-center gap-2 border-none bg-[color:var(--brand-warm)] px-5 text-slate-900 hover:bg-[color:var(--brand-warm)]/90"
             onClick={() => router(buttonRoute)}
           >
-            {buttonLabel}
+            {buttonIcon} {buttonLabel}
           </Button>
         </CardContent>
       </div>

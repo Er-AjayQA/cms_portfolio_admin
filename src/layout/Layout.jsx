@@ -18,7 +18,7 @@ export const Layout = () => {
           <div className="flex flex-col min-h-screen">
             <Header />
             <main className="flex-1 px-4 pb-4 md:px-6 md:pb-6">
-              <div className="flex min-h-[calc(100vh-7rem)] w-full flex-col rounded-[1.75rem] border border-slate-200/70 bg-white/92 p-4 shadow-[0_20px_55px_-42px_rgba(15,23,42,0.28)] backdrop-blur md:p-6">
+              <div className="app-shell flex min-h-[calc(100vh-7rem)] w-full flex-col p-4 md:p-6">
                 <Outlet />
               </div>
             </main>

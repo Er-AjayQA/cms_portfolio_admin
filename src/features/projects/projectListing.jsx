@@ -64,11 +64,9 @@ export const ProjectListingPage = () => {
         return (
           <div className="flex justify-center">
             {project?.status === "draft" ? (
-              <Badge className="px-3 py-1 border rounded-full border-amber-200 bg-amber-50 text-amber-700 hover:bg-amber-50">
-                Draft
-              </Badge>
+              <Badge className="px-3 py-1 badge-status-draft">Draft</Badge>
             ) : (
-              <Badge className="px-3 py-1 border rounded-full border-emerald-200 bg-emerald-50 text-emerald-700 hover:bg-emerald-50">
+              <Badge className="px-3 py-1 badge-status-published">
                 Published
               </Badge>
             )}
@@ -87,7 +85,7 @@ export const ProjectListingPage = () => {
             <Button
               size="sm"
               variant="outline"
-              className="bg-white rounded-xl border-slate-200 text-slate-600 hover:bg-slate-50"
+              className="text-slate-600"
               onClick={() => navigate(`/projects/view/${project.slug}`)}
             >
               <FaEye />
@@ -96,7 +94,7 @@ export const ProjectListingPage = () => {
             <Button
               size="sm"
               variant="outline"
-              className="bg-white rounded-xl border-slate-200 text-slate-600 hover:bg-slate-50"
+              className="text-slate-600"
               onClick={() => navigate(`/projects/edit/${project.slug}`)}
             >
               <FaRegEdit />
@@ -104,8 +102,7 @@ export const ProjectListingPage = () => {
 
             <Button
               size="sm"
-              variant="outline"
-              className="rounded-xl border-rose-200 bg-rose-50 text-rose-600 hover:bg-rose-100 hover:text-rose-700"
+              variant="destructive"
               onClick={() => handleDeleteProject(project._id)}
             >
               <MdOutlineDeleteForever />
@@ -119,6 +116,7 @@ export const ProjectListingPage = () => {
   return (
     <div className="space-y-5">
       <HeroShell
+        badgeText="Project Management"
         title="Projects"
         description="Organize, review, and update your portfolio projects from one clean workspace."
         buttonLabel="Create Project"

@@ -39,7 +39,7 @@ export const AppSidebar = () => {
       side="left"
       variant="sidebar"
     >
-      <div className="flex h-[calc(100vh-1.5rem)] flex-col overflow-hidden border border-slate-800/40 bg-[linear-gradient(180deg,#172033_0%,#1f2937_100%)] shadow-[0_24px_70px_-38px_rgba(15,23,42,0.85)]">
+      <div className="app-sidebar-shell flex h-[calc(100vh-1.5rem)] flex-col overflow-hidden">
         <SidebarHeader className="py-4 group-data-[collapsible=icon]:px-2">
           <div className="flex items-center gap-3 rounded-2xl border border-white/10 bg-white/5 px-3 py-3 group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:px-0">
             <div className="flex items-center justify-center size-10 shrink-0 rounded-xl bg-sidebar-primary text-sidebar-primary-foreground">

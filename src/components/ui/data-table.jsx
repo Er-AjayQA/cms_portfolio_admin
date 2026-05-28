@@ -82,30 +82,24 @@ export function DataTable({ columns, data }) {
 
   return (
     <>
-      <Card className="overflow-hidden rounded-[1.5rem] border border-slate-200/80 bg-white shadow-lg">
-        <CardHeader className="flex flex-col gap-3 p-4 border-b border-slate-200/80 bg-slate-50/70 md:flex-row md:items-center md:justify-between">
+      <Card className="app-panel-strong">
+        <CardHeader className="flex flex-col gap-3 border-b bg-muted/60 p-4 md:flex-row md:items-center md:justify-between">
           <Input
             placeholder="Filter projects by title..."
             value={table.getColumn("title")?.getFilterValue() ?? ""}
             onChange={(event) =>
               table.getColumn("title")?.setFilterValue(event.target.value)
             }
-            className="max-w-sm bg-white h-11 rounded-xl border-slate-300"
+            className="max-w-sm"
           />
 
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button
-                variant="outline"
-                className="px-4 bg-white rounded-xl border-slate-300"
-              >
+              <Button variant="outline" className="px-4">
                 Columns
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent
-              align="end"
-              className="bg-white shadow-xl rounded-xl border-slate-200"
-            >
+            <DropdownMenuContent align="end">
               {table
                 .getAllColumns()
                 .filter((column) => column.getCanHide())
@@ -128,18 +122,12 @@ export function DataTable({ columns, data }) {
         </CardHeader>
 
         <CardContent className="p-4">
-          <Table className="overflow-hidden rounded-[1rem]">
+          <Table className="overflow-hidden rounded-[var(--radius-md)]">
             <TableHeader>
               {table.getHeaderGroups().map((headerGroup) => (
-                <TableRow
-                  key={headerGroup.id}
-                  className="border-b border-slate-200 bg-slate-50 hover:bg-slate-50"
-                >
+                <TableRow key={headerGroup.id} className="bg-muted/70 hover:bg-muted/70">
                   {headerGroup.headers.map((header) => (
-                    <TableHead
-                      key={header.id}
-                      className="h-12 px-4 text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-500"
-                    >
+                    <TableHead key={header.id} className="px-4">
                       {header.isPlaceholder
                         ? null
                         : flexRender(
@@ -155,15 +143,9 @@ export function DataTable({ columns, data }) {
             <TableBody>
               {table.getRowModel().rows.length ? (
                 table.getRowModel().rows.map((row) => (
-                  <TableRow
-                    key={row.id}
-                    className="transition-colors bg-white border-b border-slate-100 hover:bg-slate-50/70"
-                  >
+                  <TableRow key={row.id} className="bg-[var(--surface-panel-strong)] hover:bg-muted/40">
                     {row.getVisibleCells().map((cell) => (
-                      <TableCell
-                        key={cell.id}
-                        className="px-4 py-4 text-sm text-slate-700"
-                      >
+                      <TableCell key={cell.id} className="px-4 py-4">
                         {cell.column.columnDef.cell
                           ? flexRender(
                               cell.column.columnDef.cell,
