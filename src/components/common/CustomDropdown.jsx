@@ -307,7 +307,7 @@ export const CustomDropdown = ({
                     <div
                       key={itemValue}
                       onClick={() => handleSelect(itemValue)}
-                      className="group relative flex w-full cursor-pointer select-none items-center rounded-[var(--radius-sm)] px-9 py-2.5 text-sm outline-none transition-colors hover:bg-muted hover:text-foreground focus:bg-muted focus:text-foreground"
+                      className="group relative flex w-full cursor-pointer select-none items-center rounded-[var(--radius-sm)] border border-transparent px-9 py-2.5 text-sm outline-none ring-0 transition-colors hover:border-transparent hover:bg-slate-200 hover:text-foreground focus:border-transparent focus:bg-slate-200 focus:text-foreground focus:outline-none focus:ring-0 focus-visible:outline-none focus-visible:ring-0"
                     >
                       <div className="flex items-center flex-1 min-w-0 gap-2">
                         <span className="absolute left-3 flex h-3.5 w-3.5 items-center justify-center">
@@ -328,7 +328,7 @@ export const CustomDropdown = ({
       </div>
 
       {showError && (
-        <p className="text-[12px] font-medium text-red-600">{error}</p>
+        <p className="text-[12px] font-medium text-red-600 ps-2">{error}</p>
       )}
       {!showError && helpText && (
         <p className="text-xs text-muted-foreground">{helpText}</p>

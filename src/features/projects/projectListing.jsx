@@ -83,8 +83,8 @@ export const ProjectListingPage = () => {
         return (
           <div className="flex justify-center gap-1">
             <Button
-              size="sm"
-              variant="outline"
+              size="icon-sm"
+              variant="icon"
               className="text-slate-600"
               onClick={() => navigate(`/projects/view/${project.slug}`)}
             >
@@ -92,8 +92,8 @@ export const ProjectListingPage = () => {
             </Button>
 
             <Button
-              size="sm"
-              variant="outline"
+              size="icon-sm"
+              variant="icon"
               className="text-slate-600"
               onClick={() => navigate(`/projects/edit/${project.slug}`)}
             >
@@ -101,7 +101,7 @@ export const ProjectListingPage = () => {
             </Button>
 
             <Button
-              size="sm"
+              size="icon-sm"
               variant="destructive"
               onClick={() => handleDeleteProject(project._id)}
             >

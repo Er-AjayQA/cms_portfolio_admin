@@ -1,8 +1,8 @@
-import * as React from "react"
+import * as React from "react";
 import { cva } from "class-variance-authority";
-import { Slot } from "radix-ui"
+import { Slot } from "radix-ui";
 
-import { cn } from "@/lib/utils"
+import { cn } from "@/lib/utils";
 
 const buttonVariants = cva(
   "group/button inline-flex shrink-0 items-center justify-center rounded-[calc(var(--radius-md)+2px)] border bg-clip-padding text-sm font-semibold whitespace-nowrap transition-all duration-200 outline-none select-none focus-visible:border-ring focus-visible:ring-4 focus-visible:ring-ring/20 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
@@ -18,8 +18,9 @@ const buttonVariants = cva(
         ghost:
           "border-transparent bg-transparent text-slate-600 hover:bg-slate-100 hover:text-slate-900 aria-expanded:bg-muted aria-expanded:text-foreground",
         destructive:
-          "border-[color:var(--brand-danger-soft)] bg-[linear-gradient(180deg,#fff1f2_0%,#ffe4e6_100%)] text-[color:var(--brand-danger-strong)] shadow-[0_12px_24px_-20px_rgba(225,29,72,0.45)] hover:-translate-y-0.5 hover:border-rose-200 hover:bg-[linear-gradient(180deg,#ffe8ec_0%,#ffd9e0_100%)] hover:shadow-[0_16px_28px_-20px_rgba(225,29,72,0.52)] focus-visible:border-destructive/40 focus-visible:ring-destructive/20",
+          "border-red-300 bg-[linear-gradient(180deg,#fff1f2_0%,#ffe4e6_100%)] text-[color:var(--brand-danger-strong)] shadow-md hover:-translate-y-0.5 hover:border-rose-200 hover:bg-[linear-gradient(180deg,#ffe8ec_0%,#ffd9e0_100%)] hover:shadow-[0_16px_28px_-20px_rgba(225,29,72,0.52)] focus-visible:border-destructive/40 focus-visible:ring-destructive/20",
         link: "text-primary underline-offset-4 hover:underline",
+        icon: "flex items-center justify-center shadow-md border border-slate-300",
       },
       size: {
         default:
@@ -29,18 +30,18 @@ const buttonVariants = cva(
         lg: "h-12 gap-2 px-6.5 has-data-[icon=inline-end]:pr-5.5 has-data-[icon=inline-start]:pl-5.5",
         icon: "size-11",
         "icon-xs":
-          "size-8 rounded-[var(--radius-sm)] in-data-[slot=button-group]:rounded-lg [&_svg:not([class*='size-'])]:size-3",
+          "w-8 h-8 rounded-full in-data-[slot=button-group]:rounded-lg [&_svg:not([class*='size-'])]:size-3",
         "icon-sm":
-          "size-10 rounded-[var(--radius-sm)] in-data-[slot=button-group]:rounded-lg",
-        "icon-lg": "size-12",
+          "w-10 h-10 rounded-full in-data-[slot=button-group]:rounded-lg",
+        "icon-lg": "w-12 h-12 rounded-full",
       },
     },
     defaultVariants: {
       variant: "default",
       size: "default",
     },
-  }
-)
+  },
+);
 
 function Button({
   className,
@@ -49,7 +50,7 @@ function Button({
   asChild = false,
   ...props
 }) {
-  const Comp = asChild ? Slot.Root : "button"
+  const Comp = asChild ? Slot.Root : "button";
 
   return (
     <Comp
@@ -57,8 +58,9 @@ function Button({
       data-variant={variant}
       data-size={size}
       className={cn(buttonVariants({ variant, size, className }))}
-      {...props} />
+      {...props}
+    />
   );
 }
 
-export { Button, buttonVariants }
+export { Button, buttonVariants };

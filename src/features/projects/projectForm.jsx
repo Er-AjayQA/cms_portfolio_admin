@@ -1,10 +1,8 @@
 import {
   Field,
-  FieldDescription,
   FieldError,
   FieldGroup,
   FieldLabel,
-  FieldLegend,
   FieldSet,
 } from "@/components/ui/field";
 import { useProjectForm } from "./useProjectForm";
@@ -78,7 +76,7 @@ export const ProjectFormPage = () => {
           buttonRoute="/projects"
         />
 
-        {/* Table */}
+        {/* Form Content */}
         <Card className="py-5">
           <CardContent className="space-y-8">
             {/* Row 1 */}
@@ -95,7 +93,7 @@ export const ProjectFormPage = () => {
                   showError={formik.touched.title && formik.errors.title}
                 />
                 {formik.errors.title && formik.touched.title && (
-                  <FieldError className="text-[12px] font-medium text-red-600">
+                  <FieldError className="text-[12px] font-medium text-red-600 ps-2">
                     {formik.errors.title}
                   </FieldError>
                 )}
@@ -113,7 +111,7 @@ export const ProjectFormPage = () => {
                   showError={formik.touched.slug && formik.errors.slug}
                 />
                 {formik.errors.slug && formik.touched.slug && (
-                  <FieldError className="text-[12px] font-medium text-red-600">
+                  <FieldError className="text-[12px] font-medium text-red-600 ps-2">
                     {formik.errors.slug}
                   </FieldError>
                 )}
@@ -134,7 +132,7 @@ export const ProjectFormPage = () => {
                   showError={formik.touched.role && formik.errors.role}
                 />
                 {formik.errors.role && formik.touched.role && (
-                  <FieldError className="text-[12px] font-medium text-red-600">
+                  <FieldError className="text-[12px] font-medium text-red-600 ps-2">
                     {formik.errors.role}
                   </FieldError>
                 )}
@@ -308,7 +306,7 @@ export const ProjectFormPage = () => {
                 />
                 {formik.errors.shortDescription &&
                   formik.touched.shortDescription && (
-                    <FieldError className="text-[12px] font-medium text-red-600">
+                    <FieldError className="text-[12px] font-medium text-red-600 ps-2">
                       {formik.errors.shortDescription}
                     </FieldError>
                   )}
@@ -329,7 +327,7 @@ export const ProjectFormPage = () => {
                   }
                 />
                 {formik.errors.description && formik.touched.description && (
-                  <FieldError className="text-[12px] font-medium text-red-600">
+                  <FieldError className="text-[12px] font-medium text-red-600 ps-2">
                     {formik.errors.description}
                   </FieldError>
                 )}
@@ -426,7 +424,7 @@ export const ProjectFormPage = () => {
                   </div>
                 </div>
                 {formik.errors.thumbnail && formik.touched.thumbnail && (
-                  <FieldError className="text-[12px] font-medium text-red-600">
+                  <FieldError className="text-[12px] font-medium text-red-600 ps-2">
                     {formik.errors.thumbnail}
                   </FieldError>
                 )}
