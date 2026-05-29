@@ -2,6 +2,7 @@ import { useFormik } from "formik";
 import * as yup from "yup";
 import {
   createProjectService,
+  deletemultipleProjectsService,
   deleteProjectService,
   getAllProjectsService,
   getBySlugProjectService,
@@ -295,6 +296,19 @@ export const useProjectForm = () => {
     }
   };
 
+  const handleDeleteMultipleProjects = async (ids) => {
+    try {
+      console.log("IDS====", ids);
+      const projectData = await deletemultipleProjectsService(ids);
+
+      if (projectData?.success) {
+        fetchAllProjects();
+      }
+    } catch (error) {
+      console.error("Error deleting selected projects:", error);
+    }
+  };
+
   const pageTitle = () => {
     switch (true) {
       case isViewMode:
@@ -334,5 +348,6 @@ export const useProjectForm = () => {
     isViewMode,
     pageTitle,
     resetForm,
+    handleDeleteMultipleProjects,
   };
 };

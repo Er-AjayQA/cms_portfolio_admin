@@ -92,3 +92,14 @@ export const deleteProjectService = async (id) => {
     throw error.response ? error.response.data : error;
   }
 };
+
+export const deletemultipleProjectsService = async (ids) => {
+  try {
+    const response = await api.delete(`/projects/delete-projects`, {
+      data: { ids },
+    });
+    return response?.data;
+  } catch (error) {
+    throw error.response ? error.response.data : error;
+  }
+};

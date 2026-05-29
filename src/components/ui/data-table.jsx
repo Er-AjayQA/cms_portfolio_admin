@@ -2,10 +2,11 @@ import {
   flexRender,
   getCoreRowModel,
   getFilteredRowModel,
+  getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { ArrowUp, ArrowDown, ArrowUpDown } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -29,10 +30,11 @@ import { Card, CardContent, CardHeader } from "./card";
 const tableHeaderTextClassName =
   "text-[11px] font-semibold tracking-[0.18em] uppercase text-slate-600";
 
-export function DataTable({ columns, data }) {
+export function DataTable({ columns, data, deleteMultipleRows }) {
   const [sorting, setSorting] = useState([]);
   const [columnFilters, setColumnFilters] = useState([]);
   const [columnVisibility, setColumnVisibility] = useState([]);
+  const [rowSelection, setRowSelection] = useState({});
 
   const normalizedColumns = columns.map((column) => {
     if (typeof column.header !== "string") {
@@ -96,14 +98,27 @@ export function DataTable({ columns, data }) {
       sorting,
       columnFilters,
       columnVisibility,
+      rowSelection,
     },
     onSortingChange: setSorting,
+    onRowSelectionChange: setRowSelection,
     getCoreRowModel: getCoreRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
     getSortedRowModel: getSortedRowModel(),
     onColumnFiltersChange: setColumnFilters,
     getFilteredRowModel: getFilteredRowModel(),
     onColumnVisibilityChange: setColumnVisibility,
+    enableRowSelection: true,
   });
+
+  const selectedRowsId = useMemo(
+    () =>
+      table
+        .getSelectedRowModel()
+        .rows.map((item) => item?.original?._id)
+        .filter(Boolean),
+    [rowSelection, table],
+  );
 
   return (
     <>
@@ -119,7 +134,14 @@ export function DataTable({ columns, data }) {
           />
 
           <div className="flex items-center gap-2">
-            <Button variant="destructive">Delete All</Button>
+            {table.getSelectedRowModel().rows?.length > 0 && (
+              <Button
+                variant="destructive"
+                onClick={() => deleteMultipleRows?.(selectedRowsId)}
+              >
+                Delete All
+              </Button>
+            )}
 
             <DropdownMenu>
               <DropdownMenuTrigger asChild>

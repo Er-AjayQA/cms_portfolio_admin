@@ -19,6 +19,7 @@ export const ProjectListingPage = () => {
     setIsEditMode,
     isViewMode,
     setIsViewMode,
+    handleDeleteMultipleProjects,
   } = useProjectForm();
   const columns = [
     {
@@ -136,7 +137,11 @@ export const ProjectListingPage = () => {
         buttonRoute="/projects/create"
       />
 
-      <DataTable columns={columns} data={allProjects} />
+      <DataTable
+        columns={columns}
+        data={allProjects}
+        deleteMultipleRows={handleDeleteMultipleProjects}
+      />
     </div>
   );
 };
