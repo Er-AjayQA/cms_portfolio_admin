@@ -160,10 +160,7 @@
 
 @layer components {
   .app-shell {
-    border: 1px solid var(--border);
-    background: var(--surface-page);
     border-radius: var(--radius-xl);
-    box-shadow: var(--shadow-panel);
     backdrop-filter: blur(10px);
   }
 

@@ -13,6 +13,7 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import {
+  FileStack,
   Folders,
   LayoutDashboard,
   LogOut,
@@ -31,6 +32,8 @@ export const AppSidebar = () => {
     { name: "Projects", path: "/projects", icon: Folders },
     { name: "Settings", path: "/settings", icon: Settings },
   ];
+
+  const cmsItems = [{ name: "Pages", path: "/Pages", icon: FileStack }];
 
   return (
     <Sidebar
@@ -65,6 +68,38 @@ export const AppSidebar = () => {
             <SidebarGroupContent>
               <SidebarMenu className="gap-1.5">
                 {navigationItems.map((item) => (
+                  <SidebarMenuItem key={item.path}>
+                    <SidebarMenuButton
+                      asChild
+                      tooltip={item.name}
+                      isActive={location.pathname === item.path}
+                      size="lg"
+                      className="rounded-xl text-slate-300 transition-all hover:bg-white/8 hover:text-white data-[active=true]:bg-white/10 data-[active=true]:text-white data-[active=true]:shadow-none group-data-[collapsible=icon]:justify-center"
+                    >
+                      <NavLink
+                        to={item.path}
+                        className="flex items-center w-full gap-2 text-inherit"
+                      >
+                        <item.icon />
+                        <span className="group-data-[collapsible=icon]:hidden">
+                          {item.name}
+                        </span>
+                      </NavLink>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                ))}
+              </SidebarMenu>
+            </SidebarGroupContent>
+          </SidebarGroup>
+
+          <SidebarGroup className="px-2">
+            <SidebarGroupLabel className="px-3 text-[11px] uppercase tracking-[0.24em] text-slate-400">
+              CMS Management
+            </SidebarGroupLabel>
+
+            <SidebarGroupContent>
+              <SidebarMenu className="gap-1.5">
+                {cmsItems.map((item) => (
                   <SidebarMenuItem key={item.path}>
                     <SidebarMenuButton
                       asChild

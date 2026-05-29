@@ -30,10 +30,19 @@ import { Card, CardContent, CardHeader } from "./card";
 const tableHeaderTextClassName =
   "text-[11px] font-semibold tracking-[0.18em] uppercase text-slate-600";
 
-export function DataTable({ columns, data, deleteMultipleRows }) {
+export function DataTable({
+  columns,
+  data,
+  deleteMultipleRows = () => {
+    alert("No functionality added yet!");
+  },
+  filterPlaceholder,
+  filterKeys,
+}) {
   const [sorting, setSorting] = useState([]);
   const [columnFilters, setColumnFilters] = useState([]);
   const [columnVisibility, setColumnVisibility] = useState([]);
+  const [globalFilter, setGlobalFilter] = useState("");
   const [rowSelection, setRowSelection] = useState({});
 
   const normalizedColumns = columns.map((column) => {
@@ -98,9 +107,11 @@ export function DataTable({ columns, data, deleteMultipleRows }) {
       sorting,
       columnFilters,
       columnVisibility,
+      globalFilter,
       rowSelection,
     },
     onSortingChange: setSorting,
+    onGlobalFilterChange: setGlobalFilter,
     onRowSelectionChange: setRowSelection,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
@@ -109,6 +120,19 @@ export function DataTable({ columns, data, deleteMultipleRows }) {
     getFilteredRowModel: getFilteredRowModel(),
     onColumnVisibilityChange: setColumnVisibility,
     enableRowSelection: true,
+    globalFilterFn: (row, _columnId, filterValue) => {
+      const searchValue = String(filterValue || "")
+        .trim()
+        .toLowerCase();
+
+      if (!searchValue) return true;
+
+      return filterKeys.some((key) =>
+        String(row.original?.[key] || "")
+          .toLowerCase()
+          .startsWith(searchValue),
+      );
+    },
   });
 
   const selectedRowsId = useMemo(
@@ -125,11 +149,9 @@ export function DataTable({ columns, data, deleteMultipleRows }) {
       <Card className="overflow-hidden app-panel-strong">
         <CardHeader className="flex flex-col gap-1 p-5 py-2 md:flex-row md:items-center md:justify-between">
           <Input
-            placeholder="Filter projects by title..."
-            value={table.getColumn("title")?.getFilterValue() ?? ""}
-            onChange={(event) =>
-              table.getColumn("title")?.setFilterValue(event.target.value)
-            }
+            placeholder={filterPlaceholder}
+            value={globalFilter}
+            onChange={(event) => setGlobalFilter(event.target.value)}
             className="max-w-sm bg-white/96"
           />
 

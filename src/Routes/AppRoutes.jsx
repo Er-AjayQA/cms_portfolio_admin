@@ -5,6 +5,8 @@ import { LoginPage } from "@/features/auth/page";
 import { Layout } from "@/layout/Layout";
 import { ProjectFormPage } from "@/features/projects/projectForm";
 import { ProjectListingPage } from "@/features/projects/projectListing";
+import { PageListingPage } from "@/features/page/pageListing";
+import { PageForm } from "@/features/page/pageForm";
 
 export const Router = () => {
   return (
@@ -28,6 +30,12 @@ export const Router = () => {
                 path="/projects/view/:slug"
                 element={<ProjectFormPage />}
               />
+
+              {/* Pages Routes */}
+              <Route path="/pages" element={<PageListingPage />} />
+              <Route path="/pages/create" element={<PageForm />} />
+              <Route path="/pages/edit/:slug" element={<PageForm />} />
+              <Route path="/pages/view/:slug" element={<PageForm />} />
 
               <Route path="/settings" element={<div>Settings</div>} />
             </Route>

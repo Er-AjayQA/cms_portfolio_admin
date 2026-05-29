@@ -298,7 +298,6 @@ export const useProjectForm = () => {
 
   const handleDeleteMultipleProjects = async (ids) => {
     try {
-      console.log("IDS====", ids);
       const projectData = await deletemultipleProjectsService(ids);
 
       if (projectData?.success) {

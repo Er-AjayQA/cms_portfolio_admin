@@ -1,5 +1,5 @@
 import { HeroShell } from "@/components/common/HeroShell";
-import { useProjectForm } from "./useProjectForm";
+import { usePageForm } from "./usePageForm";
 import { DataTable } from "@/components/ui/data-table";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
@@ -7,20 +7,12 @@ import { MdOutlineDeleteForever } from "react-icons/md";
 import { FaRegEdit, FaEye } from "react-icons/fa";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Badge } from "@/components/ui/badge";
-import { FolderKanban, Layers3, Rocket } from "lucide-react";
 
-export const ProjectListingPage = () => {
+export const PageListingPage = () => {
   const navigate = useNavigate();
-  const {
-    projectsLoading,
-    allProjects,
-    handleDeleteProject,
-    isEditMode,
-    setIsEditMode,
-    isViewMode,
-    setIsViewMode,
-    handleDeleteMultipleProjects,
-  } = useProjectForm();
+  const { allPages, handleDeletePage, handleDeleteMultiplePages } =
+    usePageForm();
+
   const columns = [
     {
       id: "select",
@@ -49,12 +41,8 @@ export const ProjectListingPage = () => {
       header: "Title",
     },
     {
-      accessorKey: "clientName",
-      header: "Client Name",
-    },
-    {
-      accessorKey: "category",
-      header: "Category",
+      accessorKey: "slug",
+      header: "Slug",
     },
     {
       accessorKey: "status",
@@ -64,11 +52,11 @@ export const ProjectListingPage = () => {
         headerClassName: "w-full text-center",
       },
       cell: ({ row }) => {
-        const project = row.original;
+        const page = row.original;
 
         return (
           <div className="flex justify-center">
-            {project?.status === "draft" ? (
+            {page?.status === "draft" ? (
               <Badge variant="warning" className="px-3 py-1 badge-status-draft">
                 Draft
               </Badge>
@@ -92,7 +80,7 @@ export const ProjectListingPage = () => {
         headerClassName: "w-full text-center",
       },
       cell: ({ row }) => {
-        const project = row.original;
+        const page = row.original;
 
         return (
           <div className="flex justify-center gap-1">
@@ -100,7 +88,7 @@ export const ProjectListingPage = () => {
               size="icon-sm"
               variant="icon"
               className="bg-[linear-gradient(180deg,#ecfdf5_0%,#dbeafe_100%)] border-green-300 hover:border-green-200 text-slate-600"
-              onClick={() => navigate(`/projects/view/${project.slug}`)}
+              onClick={() => navigate(`/pages/view/${page.slug}`)}
             >
               <FaEye fill="green" />
             </Button>
@@ -109,7 +97,7 @@ export const ProjectListingPage = () => {
               size="icon-sm"
               variant="icon"
               className="bg-[linear-gradient(180deg,#eff6ff_0%,#dbeafe_100%)] border-blue-300 hover:border-blue-200 text-slate-600"
-              onClick={() => navigate(`/projects/edit/${project.slug}`)}
+              onClick={() => navigate(`/pages/edit/${page.slug}`)}
             >
               <FaRegEdit fill="blue" />
             </Button>
@@ -117,7 +105,7 @@ export const ProjectListingPage = () => {
             <Button
               size="icon-sm"
               variant="destructive"
-              onClick={() => handleDeleteProject(project._id)}
+              onClick={() => handleDeletePage(page._id)}
             >
               <MdOutlineDeleteForever />
             </Button>
@@ -130,19 +118,19 @@ export const ProjectListingPage = () => {
   return (
     <div className="space-y-5">
       <HeroShell
-        badgeText="Project Management"
-        title="Projects"
-        description="Organize, review, and update your portfolio projects from one clean workspace."
-        buttonLabel="Create Project"
-        buttonRoute="/projects/create"
+        badgeText="Page Management"
+        title="Pages"
+        description="Organize, review, and update your portfolio pages from one clean workspace."
+        buttonLabel="Create Page"
+        buttonRoute="/pages/create"
       />
 
       <DataTable
         columns={columns}
-        data={allProjects}
-        deleteMultipleRows={handleDeleteMultipleProjects}
-        filterPlaceholder="Filter by title, client name, category or status..."
-        filterKeys={["title", "clientName", "category", "status"]}
+        data={allPages}
+        deleteMultipleRows={handleDeleteMultiplePages}
+        filterPlaceholder="Filter by title or status..."
+        filterKeys={["title", "status"]}
       />
     </div>
   );
