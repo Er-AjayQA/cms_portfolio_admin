@@ -95,7 +95,7 @@ export const ProjectListingPage = () => {
         const project = row.original;
 
         return (
-          <div className="flex justify-center gap-1">
+          <div className="flex justify-center gap-2">
             <Button
               size="icon-sm"
               variant="icon"

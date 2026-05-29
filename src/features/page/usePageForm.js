@@ -1,7 +1,6 @@
 import { useFormik } from "formik";
 import * as yup from "yup";
 import { useEffect, useState } from "react";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
 import {
   createPageService,
   deletemultiplePagesService,
@@ -12,17 +11,15 @@ import {
 } from "@/services/pages.services";
 
 export const usePageForm = () => {
-  const navigate = useNavigate();
-  const location = useLocation();
-  const params = useParams();
-
+  const [pageFormStatus, setPageFormStatus] = useState(false);
   const [pagesLoading, setPagesLoading] = useState(false);
+  const [pageSlug, setPageSlug] = useState(null);
   const [allPages, setAllPages] = useState([]);
   const [pageDetailLoading, setPageDetailLoading] = useState(false);
   const [pageDetail, setPageDetail] = useState(null);
 
-  const isEditMode = location.pathname.startsWith("/pages/edit/");
-  const isViewMode = location.pathname.startsWith("/pages/view/");
+  const [isEditMode, setIsEditMode] = useState(false);
+  const [isViewMode, setIsViewMode] = useState(false);
 
   const pageTitle = () => {
     switch (true) {
@@ -81,6 +78,10 @@ export const usePageForm = () => {
 
   const resetForm = () => {
     formik.resetForm();
+    setIsEditMode(false);
+    setIsViewMode(false);
+    setPageSlug(null);
+    setPageDetail(null);
   };
 
   const formik = useFormik({
@@ -89,12 +90,13 @@ export const usePageForm = () => {
     onSubmit: async (values, helpers) => {
       try {
         if (isEditMode) {
-          await updatePageService(params.slug, values);
+          await updatePageService(pageSlug, values);
         } else {
           await createPageService(values);
         }
 
-        navigate("/pages", { replace: true });
+        fetchAllPages();
+        setPageFormStatus(false);
         resetForm();
       } catch (error) {
         console.error("Error saving page:", error);
@@ -114,6 +116,8 @@ export const usePageForm = () => {
           slug: pageData.slug || "",
           status: pageData.status || "draft",
         });
+
+        setPageFormStatus(true);
       }
     } catch (error) {
       console.error("Error fetching page detail:", error);
@@ -153,6 +157,18 @@ export const usePageForm = () => {
     });
   }, [formik.values.title]);
 
+  useEffect(() => {
+    if (isEditMode || isViewMode) {
+      setPageFormStatus(true);
+    }
+  }, [isEditMode, isViewMode]);
+
+  useEffect(() => {
+    if (pageSlug) {
+      handleGetPageDetail(pageSlug);
+    }
+  }, [pageSlug]);
+
   return {
     formik,
     pagesLoading,
@@ -168,5 +184,11 @@ export const usePageForm = () => {
     pageTitle,
     resetForm,
     handleDeleteMultiplePages,
+    pageFormStatus,
+    setPageFormStatus,
+    setIsEditMode,
+    setIsViewMode,
+    pageSlug,
+    setPageSlug,
   };
 };

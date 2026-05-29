@@ -21,7 +21,7 @@ import { useEffect } from "react";
 import { HeroShell } from "@/components/common/HeroShell";
 import { Card, CardContent } from "@/components/ui/card";
 
-export const PageForm = () => {
+export const PageEditorForm = () => {
   const {
     formik,
     handleGetPageDetail,
@@ -45,8 +45,8 @@ export const PageForm = () => {
         <HeroShell
           badgeText="Form"
           buttonIcon={<ChevronLeft className="w-4 h-4" />}
-          title={pageTitle()}
-          description="This page route will appear in you portfolio."
+          title="Page Editor"
+          description="You can manage your page sections here."
           buttonLabel="Back"
           buttonRoute="/pages"
         />

@@ -6,7 +6,7 @@ import { Layout } from "@/layout/Layout";
 import { ProjectFormPage } from "@/features/projects/projectForm";
 import { ProjectListingPage } from "@/features/projects/projectListing";
 import { PageListingPage } from "@/features/page/pageListing";
-import { PageForm } from "@/features/page/pageForm";
+import { PageEditorForm } from "@/features/page/pageEditorForm";
 
 export const Router = () => {
   return (
@@ -33,9 +33,10 @@ export const Router = () => {
 
               {/* Pages Routes */}
               <Route path="/pages" element={<PageListingPage />} />
-              <Route path="/pages/create" element={<PageForm />} />
-              <Route path="/pages/edit/:slug" element={<PageForm />} />
-              <Route path="/pages/view/:slug" element={<PageForm />} />
+              <Route
+                path="/pages/page-editor/:slug"
+                element={<PageEditorForm />}
+              />
 
               <Route path="/settings" element={<div>Settings</div>} />
             </Route>
