@@ -26,14 +26,32 @@ import {
 } from "./dropdown-menu";
 import { Card, CardContent, CardHeader } from "./card";
 
+const tableHeaderTextClassName =
+  "text-[11px] font-semibold tracking-[0.18em] uppercase text-slate-600";
+
 export function DataTable({ columns, data }) {
   const [sorting, setSorting] = useState([]);
   const [columnFilters, setColumnFilters] = useState([]);
   const [columnVisibility, setColumnVisibility] = useState([]);
 
   const normalizedColumns = columns.map((column) => {
-    if (!column.accessorKey || typeof column.header !== "string") {
+    if (typeof column.header !== "string") {
       return column;
+    }
+
+    if (column.enableSorting === false) {
+      return {
+        ...column,
+        header: () => (
+          <div
+            className={[tableHeaderTextClassName, column.meta?.headerClassName]
+              .filter(Boolean)
+              .join(" ")}
+          >
+            {column.header}
+          </div>
+        ),
+      };
     }
 
     return {
@@ -53,7 +71,14 @@ export function DataTable({ columns, data }) {
             type="button"
             variant="ghost"
             size="sm"
-            className="h-8 px-2 -ml-2"
+            className={[
+              "h-8 rounded-none border-none bg-transparent px-2 shadow-none hover:bg-transparent focus-visible:border-transparent focus-visible:ring-0",
+              tableHeaderTextClassName,
+              "hover:text-slate-600",
+              column.meta?.headerClassName,
+            ]
+              .filter(Boolean)
+              .join(" ")}
             onClick={tableColumn.getToggleSortingHandler()}
           >
             {column.header}
@@ -93,35 +118,39 @@ export function DataTable({ columns, data }) {
             className="max-w-sm bg-white/96"
           />
 
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="outline" className="px-4">
-                Columns
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent
-              align="end"
-              className="shadow-md dropdown-content-bg"
-            >
-              {table
-                .getAllColumns()
-                .filter((column) => column.getCanHide())
-                .map((column) => {
-                  return (
-                    <DropdownMenuCheckboxItem
-                      key={column.id}
-                      className="px-5 py-2 capitalize"
-                      checked={column.getIsVisible()}
-                      onCheckedChange={(value) =>
-                        column.toggleVisibility(!!value)
-                      }
-                    >
-                      {column.id}
-                    </DropdownMenuCheckboxItem>
-                  );
-                })}
-            </DropdownMenuContent>
-          </DropdownMenu>
+          <div className="flex items-center gap-2">
+            <Button variant="destructive">Delete All</Button>
+
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="outline" className="px-4">
+                  Columns
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent
+                align="end"
+                className="shadow-md dropdown-content-bg"
+              >
+                {table
+                  .getAllColumns()
+                  .filter((column) => column.getCanHide())
+                  .map((column) => {
+                    return (
+                      <DropdownMenuCheckboxItem
+                        key={column.id}
+                        className="px-5 py-2 capitalize"
+                        checked={column.getIsVisible()}
+                        onCheckedChange={(value) =>
+                          column.toggleVisibility(!!value)
+                        }
+                      >
+                        {column.id}
+                      </DropdownMenuCheckboxItem>
+                    );
+                  })}
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
         </CardHeader>
 
         <CardContent className="p-5 py-2">

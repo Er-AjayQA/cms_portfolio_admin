@@ -57,16 +57,25 @@ export const ProjectListingPage = () => {
     },
     {
       accessorKey: "status",
-      header: () => <div className="text-center">Status</div>,
+      header: "Status",
+      enableSorting: false,
+      meta: {
+        headerClassName: "w-full text-center",
+      },
       cell: ({ row }) => {
         const project = row.original;
 
         return (
           <div className="flex justify-center">
             {project?.status === "draft" ? (
-              <Badge className="px-3 py-1 badge-status-draft">Draft</Badge>
+              <Badge variant="warning" className="px-3 py-1 badge-status-draft">
+                Draft
+              </Badge>
             ) : (
-              <Badge className="px-3 py-1 badge-status-published">
+              <Badge
+                variant="success"
+                className="px-3 py-1 badge-status-published"
+              >
                 Published
               </Badge>
             )}
@@ -76,7 +85,11 @@ export const ProjectListingPage = () => {
     },
     {
       id: "actions",
-      header: () => <div className="text-center">Actions</div>,
+      header: "Actions",
+      enableSorting: false,
+      meta: {
+        headerClassName: "w-full text-center",
+      },
       cell: ({ row }) => {
         const project = row.original;
 
@@ -85,19 +98,19 @@ export const ProjectListingPage = () => {
             <Button
               size="icon-sm"
               variant="icon"
-              className="text-slate-600"
+              className="bg-[linear-gradient(180deg,#ecfdf5_0%,#dbeafe_100%)] border-green-300 hover:border-green-200 text-slate-600"
               onClick={() => navigate(`/projects/view/${project.slug}`)}
             >
-              <FaEye />
+              <FaEye fill="green" />
             </Button>
 
             <Button
               size="icon-sm"
               variant="icon"
-              className="text-slate-600"
+              className="bg-[linear-gradient(180deg,#eff6ff_0%,#dbeafe_100%)] border-blue-300 hover:border-blue-200 text-slate-600"
               onClick={() => navigate(`/projects/edit/${project.slug}`)}
             >
-              <FaRegEdit />
+              <FaRegEdit fill="blue" />
             </Button>
 
             <Button

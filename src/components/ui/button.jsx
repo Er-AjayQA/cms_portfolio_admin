@@ -20,7 +20,7 @@ const buttonVariants = cva(
         destructive:
           "border-red-300 bg-[linear-gradient(180deg,#fff1f2_0%,#ffe4e6_100%)] text-[color:var(--brand-danger-strong)] shadow-md hover:-translate-y-0.5 hover:border-rose-200 hover:bg-[linear-gradient(180deg,#ffe8ec_0%,#ffd9e0_100%)] hover:shadow-[0_16px_28px_-20px_rgba(225,29,72,0.52)] focus-visible:border-destructive/40 focus-visible:ring-destructive/20",
         link: "text-primary underline-offset-4 hover:underline",
-        icon: "flex items-center justify-center shadow-md border border-slate-300",
+        icon: "flex items-center justify-center shadow-md border border-slate-300 hover:-translate-y-0.5",
       },
       size: {
         default:
