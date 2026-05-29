@@ -5,22 +5,22 @@ import { Input } from "@/components/ui/input";
 
 export const Header = () => {
   return (
-    <header className="sticky top-0 z-10 bg-transparent">
-      <div className="flex w-full items-center gap-3 px-4 py-4 md:px-6">
+    <header className="sticky top-0 z-10 bg-white shadow-md">
+      <div className="flex items-center w-full gap-3 px-4 py-4 md:px-6">
         <SidebarTrigger className="app-toolbar rounded-[var(--radius-md)] hover:bg-muted" />
 
-        <div className="relative hidden max-w-md flex-1 md:block">
-          <Search className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-slate-400" />
+        <div className="relative flex-1 hidden max-w-md md:block">
+          <Search className="absolute -translate-y-1/2 pointer-events-none top-1/2 left-3 size-4 text-slate-400" />
           <Input
             placeholder="Search projects, content, settings..."
             className="pl-9"
           />
         </div>
 
-        <div className="ml-auto flex items-center gap-3">
+        <div className="flex items-center gap-3 ml-auto">
           <Button
             type="button"
-            variant="outline"
+            variant="icon"
             size="icon"
             className="app-toolbar"
           >
@@ -28,7 +28,7 @@ export const Header = () => {
           </Button>
 
           <div className="app-toolbar hidden items-center gap-3 rounded-[var(--radius-md)] px-3 py-2 md:flex">
-            <div className="flex size-10 items-center justify-center rounded-xl bg-slate-900 text-sm font-semibold text-white">
+            <div className="flex items-center justify-center text-sm font-semibold text-white size-10 rounded-xl bg-slate-900">
               A
             </div>
             <div>

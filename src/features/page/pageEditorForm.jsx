@@ -46,7 +46,7 @@ export const PageEditorForm = () => {
           badgeText="Form"
           buttonIcon={<ChevronLeft className="w-4 h-4" />}
           title="Page Editor"
-          description="You can manage your page sections here."
+          description="You can manage your page content here."
           buttonLabel="Back"
           buttonRoute="/pages"
         />

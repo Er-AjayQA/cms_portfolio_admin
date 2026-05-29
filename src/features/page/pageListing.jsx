@@ -197,7 +197,7 @@ export const PageListingPage = () => {
           }
         }}
       >
-        <SheetContent className="bg-white">
+        <SheetContent className="flex h-full flex-col bg-white">
           <SheetHeader className="p-0">
             <HeroShell
               buttonIcon={<ChevronLeft className="w-4 h-4" />}
@@ -207,8 +207,8 @@ export const PageListingPage = () => {
             />
           </SheetHeader>
           {/* Form Content */}
-          <form onSubmit={formik.handleSubmit}>
-            <FieldSet className="gap-6">
+          <form onSubmit={formik.handleSubmit} className="flex flex-1 flex-col">
+            <FieldSet className="flex-1 gap-6">
               <Card className="py-5 bg-transparent border-none rounded-none">
                 <CardContent className="space-y-8">
                   {/* Row 1 */}
@@ -278,7 +278,7 @@ export const PageListingPage = () => {
               </Card>
             </FieldSet>
 
-            <SheetFooter className="mt-auto">
+            <SheetFooter className="mt-auto pt-4">
               {!isViewMode && (
                 <Button type="submit" variant="default">
                   {isEditMode ? "Update Page" : "Create Page"}

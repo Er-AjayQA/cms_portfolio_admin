@@ -138,6 +138,19 @@ export const AppSidebar = () => {
               >
                 <LogOut />
                 <span className="group-data-[collapsible=icon]:hidden">
+                  Settings
+                </span>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+            <SidebarMenuItem>
+              <SidebarMenuButton
+                tooltip="Logout"
+                onClick={logout}
+                size="lg"
+                className="rounded-xl text-slate-300 hover:bg-white/8 hover:text-white group-data-[collapsible=icon]:justify-center"
+              >
+                <LogOut />
+                <span className="group-data-[collapsible=icon]:hidden">
                   Logout
                 </span>
               </SidebarMenuButton>
