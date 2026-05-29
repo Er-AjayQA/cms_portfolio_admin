@@ -19,17 +19,27 @@ import {
 } from "@/components/ui/select";
 import { useEffect } from "react";
 import { HeroShell } from "@/components/common/HeroShell";
-import { Card, CardContent } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { usePageEditorForm } from "./usePageEditorForm";
 
 export const PageEditorForm = () => {
   const {
     formik,
-    handleGetPageDetail,
     isEditMode,
     isViewMode,
-    pageTitle,
     resetForm,
+    handleGetPageDetail,
+    pageDetail,
   } = usePageForm();
+
+  const { sectionTypeOptions } = usePageEditorForm();
+
   const navigate = useNavigate();
   const param = useParams();
 
@@ -40,80 +50,78 @@ export const PageEditorForm = () => {
   }, [param?.slug]);
 
   return (
-    <form onSubmit={formik.handleSubmit}>
-      <FieldSet className="gap-6">
-        <HeroShell
-          badgeText="Form"
-          buttonIcon={<ChevronLeft className="w-4 h-4" />}
-          title="Page Editor"
-          description="You can manage your page content here."
-          buttonLabel="Back"
-          buttonRoute="/pages"
-        />
+    <>
+      <form onSubmit={formik.handleSubmit}>
+        <FieldSet className="gap-6">
+          <HeroShell
+            badgeText="Editor"
+            buttonIcon={<ChevronLeft className="w-4 h-4" />}
+            title="Page Editor"
+            description="You can manage your page content here."
+            buttonLabel="Back"
+            buttonRoute="/pages"
+          />
 
-        {/* Form Content */}
-        <Card className="py-5">
-          <CardContent className="space-y-8">
-            {/* Row 1 */}
-            <FieldGroup className="grid gap-5 md:grid-cols-2">
-              <Field>
-                <FieldLabel htmlFor="title">Page Title</FieldLabel>
-                <Input
-                  type="text"
-                  name="title"
-                  value={formik.values.title}
-                  onChange={formik.handleChange}
-                  autoComplete="off"
-                  placeholder="eg: About Us"
-                  showError={formik.touched.title && formik.errors.title}
-                />
-                {formik.errors.title && formik.touched.title && (
-                  <FieldError className="text-[12px] font-medium text-red-600 ps-2">
-                    {formik.errors.title}
-                  </FieldError>
-                )}
-              </Field>
+          <div className="grid grid-cols-[1fr_3fr] gap-2">
+            {/* Page Basic Info */}
+            <Card className="space-y-5">
+              <CardHeader>
+                <CardTitle>Basic Information</CardTitle>
+                <CardDescription>Page basic details.</CardDescription>
+              </CardHeader>
 
-              <Field>
-                <FieldLabel htmlFor="slug">Slug</FieldLabel>
-                <Input
-                  type="text"
-                  name="slug"
-                  value={formik.values.slug}
-                  onChange={formik.handleChange}
-                  autoComplete="off"
-                  placeholder="eg: about-us"
-                  showError={formik.touched.slug && formik.errors.slug}
-                />
-                {formik.errors.slug && formik.touched.slug && (
-                  <FieldError className="text-[12px] font-medium text-red-600 ps-2">
-                    {formik.errors.slug}
-                  </FieldError>
-                )}
-              </Field>
-            </FieldGroup>
+              <CardContent className="space-y-5">
+                <FieldGroup className="flex flex-col gap-5">
+                  <Field className="grid grid-cols-[1fr_2fr]">
+                    <FieldLabel className="font-semibold">
+                      Page Title :
+                    </FieldLabel>
+                    <p>{pageDetail?.title}</p>
+                  </Field>
 
-            {/* Row 6 */}
-            <FieldGroup className="grid gap-5 md:grid-cols-2">
-              <Field>
-                <FieldLabel htmlFor="status">Status</FieldLabel>
-                <Select
-                  name="status"
-                  value={formik.values.status}
-                  onValueChange={(nextValue) =>
-                    formik.setFieldValue("status", nextValue)
-                  }
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select status" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="draft">Draft</SelectItem>
-                    <SelectItem value="published">Published</SelectItem>
-                  </SelectContent>
-                </Select>
-              </Field>
-            </FieldGroup>
+                  <Field className="grid grid-cols-[1fr_2fr]">
+                    <FieldLabel className="font-semibold">
+                      Page Slug :
+                    </FieldLabel>
+                    <p>{pageDetail?.slug}</p>
+                  </Field>
+                </FieldGroup>
+
+                <FieldGroup className="flex flex-col gap-5">
+                  <Field className="grid grid-cols-[1fr_2fr]">
+                    <Button className="rounded-sm">Add New Section</Button>
+                  </Field>
+                </FieldGroup>
+              </CardContent>
+            </Card>
+
+            {/* Form Content */}
+            <Card className="py-5">
+              <CardContent className="space-y-8">
+                <FieldGroup>
+                  <Field>
+                    <FieldLabel>Section Type</FieldLabel>
+                    <Select
+                      value={formik.values.sectionType}
+                      onValueChange={(nextValue) =>
+                        formik.setFieldValue("sectionType", nextValue)
+                      }
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select a type" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {sectionTypeOptions.map((item) => (
+                          <SelectItem key={item?.value} value={item?.value}>
+                            {item?.label}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </Field>
+                </FieldGroup>
+              </CardContent>
+            </Card>
 
             {/* Action Buttons */}
             <Field orientation="horizontal" className="justify-end gap-2 mt-6">
@@ -133,9 +141,9 @@ export const PageEditorForm = () => {
                 </Button>
               )}
             </Field>
-          </CardContent>
-        </Card>
-      </FieldSet>
-    </form>
+          </div>
+        </FieldSet>
+      </form>
+    </>
   );
 };

@@ -151,7 +151,10 @@ export const PageListingPage = () => {
               size="icon-sm"
               variant="icon"
               className="bg-[linear-gradient(180deg,#eff6ff_0%,#dbeafe_100%)] border-blue-300 hover:border-blue-200 text-slate-600"
-              onClick={() => navigate(`/pages/page-editor/${page.slug}`)}
+              onClick={() => {
+                setPageSlug(page?.slug);
+                navigate(`/pages/page-editor/${page.slug}`);
+              }}
             >
               <VscEditorLayout fill="blue" />
             </Button>
@@ -197,7 +200,7 @@ export const PageListingPage = () => {
           }
         }}
       >
-        <SheetContent className="flex h-full flex-col bg-white">
+        <SheetContent className="flex flex-col h-full bg-white">
           <SheetHeader className="p-0">
             <HeroShell
               buttonIcon={<ChevronLeft className="w-4 h-4" />}
@@ -207,7 +210,7 @@ export const PageListingPage = () => {
             />
           </SheetHeader>
           {/* Form Content */}
-          <form onSubmit={formik.handleSubmit} className="flex flex-1 flex-col">
+          <form onSubmit={formik.handleSubmit} className="flex flex-col flex-1">
             <FieldSet className="flex-1 gap-6">
               <Card className="py-5 bg-transparent border-none rounded-none">
                 <CardContent className="space-y-8">
@@ -278,7 +281,7 @@ export const PageListingPage = () => {
               </Card>
             </FieldSet>
 
-            <SheetFooter className="mt-auto pt-4">
+            <SheetFooter className="pt-4 mt-auto">
               {!isViewMode && (
                 <Button type="submit" variant="default">
                   {isEditMode ? "Update Page" : "Create Page"}
