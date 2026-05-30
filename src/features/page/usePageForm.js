@@ -9,7 +9,6 @@ import {
   getBySlugPageService,
   updatePageService,
 } from "@/services/pages.services";
-import { HeroFields } from "@/components/customComponents/HeroFields";
 
 export const usePageForm = () => {
   const [pageFormStatus, setPageFormStatus] = useState(false);
@@ -18,6 +17,7 @@ export const usePageForm = () => {
   const [allPages, setAllPages] = useState([]);
   const [pageDetailLoading, setPageDetailLoading] = useState(false);
   const [pageDetail, setPageDetail] = useState(null);
+  const [selectedSectionType, setSelectedSectionType] = useState("hero");
 
   const [isEditMode, setIsEditMode] = useState(false);
   const [isViewMode, setIsViewMode] = useState(false);
@@ -61,16 +61,6 @@ export const usePageForm = () => {
         return "Edit Page";
       default:
         return "Create Page";
-    }
-  };
-
-  const renderPageSection = (type, prefix) => {
-    switch (type) {
-      case "hero":
-        return <HeroFields prefix={prefix} />;
-
-      default:
-        return <p>Select a section type to configure fields.</p>;
     }
   };
 
@@ -157,6 +147,7 @@ export const usePageForm = () => {
           title: pageData.title || "",
           pageKey: pageData.pageKey || "",
           slug: pageData.slug || "",
+          sections: [],
           status: pageData.status || "draft",
         });
 
@@ -192,12 +183,15 @@ export const usePageForm = () => {
   };
 
   useEffect(() => {
-    formik.setFieldValue("slug", () => {
-      return formik.values.title?.split(" ")?.join("-");
-    });
-    formik.setFieldValue("pageKey", () => {
-      return formik.values.title?.split(" ")?.join("-");
-    });
+    const normalizedValue = formik.values.title
+      ?.trim()
+      ?.toLowerCase()
+      ?.split(" ")
+      ?.filter(Boolean)
+      ?.join("-");
+
+    formik.setFieldValue("slug", normalizedValue);
+    formik.setFieldValue("pageKey", normalizedValue);
   }, [formik.values.title]);
 
   useEffect(() => {
@@ -234,6 +228,7 @@ export const usePageForm = () => {
     pageSlug,
     setPageSlug,
     sectionTypeOptions,
-    renderPageSection,
+    selectedSectionType,
+    setSelectedSectionType,
   };
 };
