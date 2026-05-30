@@ -1,12 +1,5 @@
-import {
-  Field,
-  FieldError,
-  FieldGroup,
-  FieldLabel,
-  FieldSet,
-} from "@/components/ui/field";
+import { Field, FieldGroup, FieldLabel, FieldSet } from "@/components/ui/field";
 import { usePageForm } from "./usePageForm";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useNavigate, useParams } from "react-router-dom";
 import { ChevronLeft } from "lucide-react";
@@ -26,7 +19,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { usePageEditorForm } from "./usePageEditorForm";
 
 export const PageEditorForm = () => {
   const {
@@ -36,9 +28,9 @@ export const PageEditorForm = () => {
     resetForm,
     handleGetPageDetail,
     pageDetail,
+    sectionTypeOptions,
+    renderPageSection,
   } = usePageForm();
-
-  const { sectionTypeOptions } = usePageEditorForm();
 
   const navigate = useNavigate();
   const param = useParams();
@@ -103,9 +95,10 @@ export const PageEditorForm = () => {
                     <FieldLabel>Section Type</FieldLabel>
                     <Select
                       value={formik.values.sectionType}
-                      onValueChange={(nextValue) =>
-                        formik.setFieldValue("sectionType", nextValue)
-                      }
+                      onValueChange={(nextValue) => {
+                        formik.setFieldValue("sectionType", nextValue);
+                        renderPageSection(nextValue);
+                      }}
                     >
                       <SelectTrigger>
                         <SelectValue placeholder="Select a type" />

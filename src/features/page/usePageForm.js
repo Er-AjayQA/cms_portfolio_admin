@@ -9,6 +9,7 @@ import {
   getBySlugPageService,
   updatePageService,
 } from "@/services/pages.services";
+import { HeroFields } from "@/components/customComponents/HeroFields";
 
 export const usePageForm = () => {
   const [pageFormStatus, setPageFormStatus] = useState(false);
@@ -21,6 +22,37 @@ export const usePageForm = () => {
   const [isEditMode, setIsEditMode] = useState(false);
   const [isViewMode, setIsViewMode] = useState(false);
 
+  const sectionTypeOptions = [
+    { label: "Hero", value: "hero" },
+    { label: "About", value: "about" },
+    { label: "Skills", value: "skills" },
+    { label: "Experience", value: "experience" },
+    { label: "Timeline", value: "timeline" },
+    { label: "Projects", value: "projects" },
+    { label: "Project Grid", value: "project_grid" },
+    { label: "Featured Project", value: "project_featured" },
+    { label: "Tech Stack", value: "tech_stack" },
+    { label: "Stats", value: "stats" },
+    { label: "Testimonial", value: "testimonial" },
+    { label: "Certification", value: "certification" },
+    { label: "Education", value: "education" },
+    { label: "Gallery", value: "gallery" },
+    { label: "Rich Text", value: "rich_text" },
+    { label: "CTA", value: "cta" },
+    { label: "Contact Form", value: "contact_form" },
+    { label: "Social Links", value: "social_links" },
+    { label: "Map", value: "map" },
+    { label: "Custom HTML", value: "custom_html" },
+    { label: "Achievements", value: "achievements" },
+    { label: "Awards", value: "awards" },
+    { label: "Blogs", value: "blogs" },
+    { label: "Services", value: "services" },
+    { label: "Open Source", value: "open_source" },
+    { label: "Resume", value: "resume" },
+    { label: "Clients", value: "clients" },
+    { label: "FAQ", value: "faq" },
+  ];
+
   const pageTitle = () => {
     switch (true) {
       case isViewMode:
@@ -29,6 +61,16 @@ export const usePageForm = () => {
         return "Edit Page";
       default:
         return "Create Page";
+    }
+  };
+
+  const renderPageSection = (type, prefix) => {
+    switch (type) {
+      case "hero":
+        return <HeroFields prefix={prefix} />;
+
+      default:
+        return <p>Select a section type to configure fields.</p>;
     }
   };
 
@@ -41,6 +83,7 @@ export const usePageForm = () => {
     title: "",
     pageKey: "",
     slug: "",
+    sections: [],
     status: "draft",
   };
 
@@ -190,5 +233,7 @@ export const usePageForm = () => {
     setIsViewMode,
     pageSlug,
     setPageSlug,
+    sectionTypeOptions,
+    renderPageSection,
   };
 };
