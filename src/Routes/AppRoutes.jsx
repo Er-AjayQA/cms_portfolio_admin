@@ -7,6 +7,7 @@ import { ProjectFormPage } from "@/features/projects/projectForm";
 import { ProjectListingPage } from "@/features/projects/projectListing";
 import { PageListingPage } from "@/features/page/pageListing";
 import { PageEditorForm } from "@/features/page/pageEditorForm";
+import { SkillCategoryListing } from "@/features/masters/skillCategory/skillCategoryListing";
 
 export const Router = () => {
   return (
@@ -36,6 +37,12 @@ export const Router = () => {
               <Route
                 path="/pages/page-editor/:slug"
                 element={<PageEditorForm />}
+              />
+
+              {/* Skill Category Routes */}
+              <Route
+                path="/skill-categories"
+                element={<SkillCategoryListing />}
               />
 
               <Route path="/settings" element={<div>Settings</div>} />
