@@ -200,7 +200,7 @@ export const PageListingPage = () => {
           }
         }}
       >
-        <SheetContent className="flex flex-col h-full bg-white">
+        <SheetContent className="flex flex-col h-full overflow-hidden bg-white rounded-l-lg">
           <SheetHeader className="p-0">
             <HeroShell
               buttonIcon={<ChevronLeft className="w-4 h-4" />}
