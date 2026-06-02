@@ -23,6 +23,7 @@ export const useProjectForm = () => {
   const [projectDetail, setProjectDetail] = useState(null);
   const [thumbnailPreview, setThumbnailPreview] = useState("");
   const [mediaPreviews, setMediaPreviews] = useState([]);
+  const [isSlugManuallyEdited, setIsSlugManuallyEdited] = useState(false);
   const thumbnailPreviewRef = useRef("");
   const mediaPreviewsRef = useRef([]);
 
@@ -76,6 +77,15 @@ export const useProjectForm = () => {
     solution: "",
   };
 
+  const generateSlug = (value = "") =>
+    value
+      ?.trim()
+      ?.toLowerCase()
+      ?.replace(/[^\w\s-]/g, "")
+      ?.split(" ")
+      ?.filter(Boolean)
+      ?.join("-");
+
   const fetchAllProjects = async () => {
     try {
       setProjectsLoading(true);
@@ -112,6 +122,7 @@ export const useProjectForm = () => {
     formik.resetForm();
     setThumbnailPreview("");
     setMediaPreviews([]);
+    setIsSlugManuallyEdited(false);
   };
 
   const formik = useFormik({
@@ -243,6 +254,7 @@ export const useProjectForm = () => {
       const projectData = await fetchBySlugProject(slug);
 
       if (projectData) {
+        setIsSlugManuallyEdited(true);
         formik.setValues({
           title: projectData.title || "",
           slug: projectData.slug || "",
@@ -320,10 +332,28 @@ export const useProjectForm = () => {
   };
 
   useEffect(() => {
-    formik.setFieldValue("slug", () => {
-      return formik.values.title?.split(" ")?.join("-");
-    });
-  }, [formik.values.title]);
+    if (isSlugManuallyEdited) {
+      return;
+    }
+
+    const normalizedValue = generateSlug(formik.values.title);
+
+    if (formik.values.slug !== normalizedValue) {
+      formik.setFieldValue("slug", normalizedValue);
+    }
+  }, [formik.values.title, formik.values.slug, isSlugManuallyEdited]);
+
+  const handleTitleChange = (event) => {
+    formik.handleChange(event);
+  };
+
+  const handleSlugChange = (event) => {
+    const nextSlug = event.target.value;
+    const normalizedTitleSlug = generateSlug(formik.values.title);
+
+    setIsSlugManuallyEdited(nextSlug !== normalizedTitleSlug);
+    formik.setFieldValue("slug", nextSlug);
+  };
 
   return {
     formik,
@@ -348,5 +378,7 @@ export const useProjectForm = () => {
     pageTitle,
     resetForm,
     handleDeleteMultipleProjects,
+    handleTitleChange,
+    handleSlugChange,
   };
 };

@@ -38,6 +38,8 @@ export const ProjectFormPage = () => {
     categoryOptions,
     thumbnailPreview,
     mediaPreviews,
+    handleTitleChange,
+    handleSlugChange,
     handleThumbnailChange,
     clearThumbnail,
     handleMediaChange,
@@ -87,7 +89,7 @@ export const ProjectFormPage = () => {
                   type="text"
                   name="title"
                   value={formik.values.title}
-                  onChange={formik.handleChange}
+                  onChange={handleTitleChange}
                   autoComplete="off"
                   placeholder="eg: CRM Dashboard"
                   showError={formik.touched.title && formik.errors.title}
@@ -105,7 +107,7 @@ export const ProjectFormPage = () => {
                   type="text"
                   name="slug"
                   value={formik.values.slug}
-                  onChange={formik.handleChange}
+                  onChange={handleSlugChange}
                   autoComplete="off"
                   placeholder="eg: CRM Dashboard"
                   showError={formik.touched.slug && formik.errors.slug}
