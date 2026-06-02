@@ -37,6 +37,8 @@ export const TechStackListing = () => {
   const {
     formik,
     allData,
+    handleNameChange,
+    handleSlugChange,
     handleDeleteRecord,
     isEditMode,
     isViewMode,
@@ -215,7 +217,7 @@ export const TechStackListing = () => {
                         type="text"
                         name="name"
                         value={formik.values.name}
-                        onChange={formik.handleChange}
+                        onChange={handleNameChange}
                         autoComplete="off"
                         placeholder="eg: About Us"
                         showError={formik.touched.name && formik.errors.name}
@@ -236,7 +238,7 @@ export const TechStackListing = () => {
                         type="text"
                         name="slug"
                         value={formik.values.slug}
-                        onChange={formik.handleChange}
+                        onChange={handleSlugChange}
                         autoComplete="off"
                         placeholder="eg: about-us"
                         showError={formik.touched.slug && formik.errors.slug}

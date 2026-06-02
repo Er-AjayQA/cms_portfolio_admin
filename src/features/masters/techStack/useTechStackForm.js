@@ -21,6 +21,7 @@ export const useTechStackForm = () => {
 
   const [isEditMode, setIsEditMode] = useState(false);
   const [isViewMode, setIsViewMode] = useState(false);
+  const [isSlugManuallyEdited, setIsSlugManuallyEdited] = useState(false);
 
   const pageTitle = () => {
     switch (true) {
@@ -50,8 +51,17 @@ export const useTechStackForm = () => {
 
   const initialValues = {
     name: "",
+    slug: "",
     status: "active",
   };
+
+  const generateSlug = (value = "") =>
+    value
+      ?.trim()
+      ?.toLowerCase()
+      ?.split(" ")
+      ?.filter(Boolean)
+      ?.join("-");
 
   const fetchListingData = async () => {
     try {
@@ -91,6 +101,7 @@ export const useTechStackForm = () => {
     setIsViewMode(false);
     setPageSlug(null);
     setDetail(null);
+    setIsSlugManuallyEdited(false);
   };
 
   const formik = useFormik({
@@ -124,6 +135,7 @@ export const useTechStackForm = () => {
       const data = await fetchDataBySlug(slug);
 
       if (data) {
+        setIsSlugManuallyEdited(true);
         formik.setValues({
           name: data.name || "",
           slug: data.slug || "",
@@ -174,15 +186,28 @@ export const useTechStackForm = () => {
   };
 
   useEffect(() => {
-    const normalizedValue = formik.values.name
-      ?.trim()
-      ?.toLowerCase()
-      ?.split(" ")
-      ?.filter(Boolean)
-      ?.join("-");
+    if (isSlugManuallyEdited) {
+      return;
+    }
 
-    formik.setFieldValue("slug", normalizedValue);
-  }, [formik.values.name]);
+    const normalizedValue = generateSlug(formik.values.name);
+
+    if (formik.values.slug !== normalizedValue) {
+      formik.setFieldValue("slug", normalizedValue);
+    }
+  }, [formik.values.name, formik.values.slug, isSlugManuallyEdited]);
+
+  const handleNameChange = (event) => {
+    formik.handleChange(event);
+  };
+
+  const handleSlugChange = (event) => {
+    const nextSlug = event.target.value;
+    const normalizedNameSlug = generateSlug(formik.values.name);
+
+    setIsSlugManuallyEdited(nextSlug !== normalizedNameSlug);
+    formik.setFieldValue("slug", nextSlug);
+  };
 
   useEffect(() => {
     if (isEditMode || isViewMode) {
@@ -219,5 +244,7 @@ export const useTechStackForm = () => {
     setPageSlug,
     handleUpdateRecordStatus,
     pageDescription,
+    handleNameChange,
+    handleSlugChange,
   };
 };
