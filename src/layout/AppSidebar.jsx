@@ -30,7 +30,7 @@ export const AppSidebar = () => {
   const navigationItems = [
     { name: "Dashboard", path: "/dashboard", icon: LayoutDashboard },
     { name: "Projects", path: "/projects", icon: Folders },
-    { name: "Settings", path: "/settings", icon: Settings },
+    // { name: "Settings", path: "/settings", icon: Settings },
   ];
 
   const configurationItems = [
@@ -38,7 +38,7 @@ export const AppSidebar = () => {
     { name: "Tech Stack", path: "/tech-stacks", icon: FileStack },
   ];
 
-  const cmsItems = [{ name: "Pages", path: "/Pages", icon: FileStack }];
+  // const cmsItems = [{ name: "Pages", path: "/Pages", icon: FileStack }];
 
   return (
     <Sidebar
@@ -129,7 +129,7 @@ export const AppSidebar = () => {
             </SidebarGroupContent>
           </SidebarGroup>
 
-          <SidebarGroup className="px-2">
+          {/* <SidebarGroup className="px-2">
             <SidebarGroupLabel className="px-3 text-[11px] uppercase tracking-[0.24em] text-slate-400">
               CMS Management
             </SidebarGroupLabel>
@@ -159,7 +159,7 @@ export const AppSidebar = () => {
                 ))}
               </SidebarMenu>
             </SidebarGroupContent>
-          </SidebarGroup>
+          </SidebarGroup> */}
         </SidebarContent>
 
         <SidebarSeparator className="bg-white/10" />
