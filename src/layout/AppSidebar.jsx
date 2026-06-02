@@ -35,6 +35,7 @@ export const AppSidebar = () => {
 
   const configurationItems = [
     { name: "Skill Category", path: "/skill-categories", icon: FileStack },
+    { name: "Tech Stack", path: "/tech-stacks", icon: FileStack },
   ];
 
   const cmsItems = [{ name: "Pages", path: "/Pages", icon: FileStack }];

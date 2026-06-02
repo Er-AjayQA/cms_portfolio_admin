@@ -4,7 +4,6 @@ import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { MdOutlineDeleteForever } from "react-icons/md";
 import { FaRegEdit, FaEye } from "react-icons/fa";
-import { VscEditorLayout } from "react-icons/vsc";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Badge } from "@/components/ui/badge";
 
@@ -32,10 +31,9 @@ import {
   SheetHeader,
 } from "@/components/ui/sheet";
 import { Card, CardContent } from "@/components/ui/card";
-import { useSkillCategoryForm } from "./useSkillCategoryForm";
+import { useTechStackForm } from "./useTechStackForm";
 
-export const SkillCategoryListing = () => {
-  const navigate = useNavigate();
+export const TechStackListing = () => {
   const {
     formik,
     allData,
@@ -52,7 +50,7 @@ export const SkillCategoryListing = () => {
     setPageSlug,
     handleUpdateRecordStatus,
     pageDescription,
-  } = useSkillCategoryForm();
+  } = useTechStackForm();
 
   const columns = [
     {
@@ -171,8 +169,8 @@ export const SkillCategoryListing = () => {
     <div className="space-y-5">
       <HeroShell
         badgeText="Listing"
-        title="Skill Category"
-        description="Organize, review, and update skill categories from one clean workspace."
+        title="Tech Stack"
+        description="Organize, review, and update tech stacks from one clean workspace."
         buttonLabel="Create"
         buttonFunction={() => setPageFormStatus(true)}
       />

@@ -10,9 +10,56 @@ export const getAllTechStackService = async () => {
   }
 };
 
+export const getBySlugTechStackService = async (slug) => {
+  try {
+    const response = await api.get(`/tech-stack/get-by-slug/${slug}`);
+    return response?.data;
+  } catch (error) {
+    throw error.response ? error.response.data : error;
+  }
+};
+
 export const createTechStackService = async (data) => {
   try {
     const response = await api.post("/tech-stack/create", data);
+    return response?.data;
+  } catch (error) {
+    throw error.response ? error.response.data : error;
+  }
+};
+
+export const updateTechStackService = async (slug, data) => {
+  try {
+    const response = await api.put(`/tech-stack/update/${slug}`, data);
+    return response?.data;
+  } catch (error) {
+    throw error.response ? error.response.data : error;
+  }
+};
+
+export const updateStatusTechStackService = async (slug) => {
+  try {
+    const response = await api.put(`/tech-stack/update-status/${slug}`);
+    return response?.data;
+  } catch (error) {
+    throw error.response ? error.response.data : error;
+  }
+};
+
+export const deleteTechStackService = async (id) => {
+  try {
+    const response = await api.delete(`/tech-stack/delete/${id}`);
+    return response?.data;
+  } catch (error) {
+    throw error.response ? error.response.data : error;
+  }
+};
+
+export const deleteMultipleTechStackService = async (ids) => {
+  try {
+    const response = await api.delete(`/tech-stack/delete-multiple`, {
+      data: { ids },
+    });
     return response?.data;
   } catch (error) {
     throw error.response ? error.response.data : error;

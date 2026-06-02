@@ -8,6 +8,7 @@ import { ProjectListingPage } from "@/features/projects/projectListing";
 import { PageListingPage } from "@/features/page/pageListing";
 import { PageEditorForm } from "@/features/page/pageEditorForm";
 import { SkillCategoryListing } from "@/features/masters/skillCategory/skillCategoryListing";
+import { TechStackListing } from "@/features/masters/techStack/techStackListing";
 
 export const Router = () => {
   return (
@@ -44,6 +45,9 @@ export const Router = () => {
                 path="/skill-categories"
                 element={<SkillCategoryListing />}
               />
+
+              {/* Tech Stack Routes */}
+              <Route path="/tech-stacks" element={<TechStackListing />} />
 
               <Route path="/settings" element={<div>Settings</div>} />
             </Route>

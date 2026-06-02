@@ -2,24 +2,16 @@ import { useFormik } from "formik";
 import * as yup from "yup";
 import { useEffect, useState } from "react";
 import {
-  createPageService,
-  deletemultiplePagesService,
-  deletePageService,
-  getAllPagesService,
-  getBySlugPageService,
-  updatePageService,
-} from "@/services/pages.services";
-import {
-  createSkillCategoryService,
-  deleteMultipleSkillCategoryService,
-  deleteSkillCategoryService,
-  getAllSkillCategoryService,
-  getBySlugSkillCategoryService,
-  updateSkillCategoryService,
-  updateStatusSkillCategoryService,
+  createTechStackService,
+  deleteMultipleTechStackService,
+  deleteTechStackService,
+  getAllTechStackService,
+  getBySlugTechStackService,
+  updateStatusTechStackService,
+  updateTechStackService,
 } from "@/services/misc.services";
 
-export const useSkillCategoryForm = () => {
+export const useTechStackForm = () => {
   const [pageFormStatus, setPageFormStatus] = useState(false);
   const [pageSlug, setPageSlug] = useState(null);
   const [dataLoading, setDataLoading] = useState(false);
@@ -44,11 +36,11 @@ export const useSkillCategoryForm = () => {
   const pageDescription = () => {
     switch (true) {
       case isViewMode:
-        return "View Skill Category";
+        return "View Tech Stack";
       case isEditMode:
-        return "Edit Skill Category";
+        return "Edit Tech Stack";
       default:
-        return "Create Skill Category";
+        return "Create Tech Stack";
     }
   };
 
@@ -64,7 +56,7 @@ export const useSkillCategoryForm = () => {
   const fetchListingData = async () => {
     try {
       setDataLoading(true);
-      const response = await getAllSkillCategoryService();
+      const response = await getAllTechStackService();
       setAllData(Array.isArray(response?.data) ? response.data : []);
     } catch (error) {
       console.error("Error fetching records:", error);
@@ -80,7 +72,7 @@ export const useSkillCategoryForm = () => {
   const fetchDataBySlug = async (slug) => {
     try {
       setDetailLoading(true);
-      const response = await getBySlugSkillCategoryService(slug);
+      const response = await getBySlugTechStackService(slug);
       const data = response?.data || null;
 
       setDetail(data);
@@ -112,9 +104,9 @@ export const useSkillCategoryForm = () => {
             newSlug: values?.slug,
             status: values?.status,
           };
-          await updateSkillCategoryService(pageSlug, payload);
+          await updateTechStackService(pageSlug, payload);
         } else {
-          await createSkillCategoryService(values);
+          await createTechStackService(values);
         }
 
         fetchListingData();
@@ -147,7 +139,7 @@ export const useSkillCategoryForm = () => {
 
   const handleUpdateRecordStatus = async (slug) => {
     try {
-      const data = await updateStatusSkillCategoryService(slug);
+      const data = await updateStatusTechStackService(slug);
 
       if (data?.success) {
         fetchListingData();
@@ -159,7 +151,7 @@ export const useSkillCategoryForm = () => {
 
   const handleDeleteRecord = async (id) => {
     try {
-      const pageData = await deleteSkillCategoryService(id);
+      const pageData = await deleteTechStackService(id);
 
       if (pageData?.success) {
         fetchListingData();
@@ -171,7 +163,7 @@ export const useSkillCategoryForm = () => {
 
   const handleDeleteMultipleRecords = async (ids) => {
     try {
-      const pageData = await deleteMultipleSkillCategoryService(ids);
+      const pageData = await deleteMultipleTechStackService(ids);
 
       if (pageData?.success) {
         fetchListingData();
